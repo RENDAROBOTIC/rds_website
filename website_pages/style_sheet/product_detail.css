@@ -1,0 +1,248 @@
+/* Product gallery thumbnail container */
+.product-gallery .thumbnail-container {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    margin-left: 3%;
+    flex-wrap: wrap;
+}
+
+/* Thumbnail styling */
+.product-gallery .thumbnail {
+    width: 80px;
+    height: 80px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    object-fit: cover;
+    transition: border-color 0.3s, transform 0.2s;
+}
+
+.product-gallery .thumbnail:hover, 
+.product-gallery .thumbnail.active {
+    border-color: #5290e7;
+    transform: scale(1.05);
+}
+
+/* Main product image container */
+.product-gallery .main-image {
+    position: relative;
+    margin-left: 3%;
+    margin-top: 30px;
+}
+
+.product-gallery .main-image img {
+    max-width: 100%;
+    max-height: 700px; /* Set a max height for the main image */
+    border-radius: 5px;
+    box-shadow: 0 8px 20px rgba(93, 145, 202, 0.2);
+}
+
+/* RDS logo overlay on product image */
+.product-gallery .corner-logo {
+    position: absolute;
+    top: 30px;
+    left: 30px;
+    width: 45px;
+    height: auto;
+}
+
+.product-gallery .corner-logo img {
+    width: 100%;
+    height: auto;
+}
+
+/* Product info section */
+
+.product-info {
+    margin-top: 30px;
+    margin-left: 3%;
+    margin-right: 3%;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Color option swatches */
+.product-options .color-options {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.product-options .color-option {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid #ddd;
+    transition: transform 0.2s, border-color 0.3s;
+}
+
+.product-options .color-option:hover, 
+.product-options .color-option.selected {
+    transform: scale(1.1);
+    border-color: #5f98e8;
+}
+
+/* Color variant styles */
+.product-options .black {
+    background-color: #333;
+}
+
+.product-options .tan {
+    background-color: #efdba3;
+}
+
+.product-options .gold {
+    background: linear-gradient(45deg, #D4AF37, #FEE5A2, #D4AF37);
+}
+
+.product-options .silver {
+    background: linear-gradient(45deg, #C0C0C0, #E8E8E8, #C0C0C0);
+}
+
+/* Product description section */
+.product-description {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 5px;
+    margin-top: 30px;
+    margin-left: 3%;
+    margin-right: 3%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Features list styling */
+.product-features {
+    margin-top: 20px;
+}
+
+.product-features ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.product-features li {
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    padding-left: 25px;
+}
+
+.product-features li:before {
+    content: "✓";
+    color: #5290e7;
+    position: absolute;
+    left: 0;
+    font-weight: bold;
+}
+
+/* Quantity selector styling */
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    margin: 15px 0;
+}
+
+.quantity-selector button {
+    width: 30px;
+    height: 30px;
+    background: #fff;
+    border: 1px solid #ddd;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.quantity-selector button:hover {
+    background-color: #f5f5f5;
+}
+
+.quantity-selector input {
+    width: 50px;
+    height: 30px;
+    text-align: center;
+    border: 1px solid #ddd;
+    margin: 0 5px;
+}
+
+/* Size guide link */
+.size-guide {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #5290e7;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+    .product-gallery .thumbnail {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .product-gallery .corner-logo {
+        width: 35px;
+        top: 20px;
+        left: 20px;
+    }
+
+    .product-gallery .main-image img {
+        max-width: 100%;
+        max-height: 550px; /* Set a max height for the main image */
+    }
+}
+
+@media (max-width: 600px) {
+    .product-gallery .thumbnail {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .product-gallery .corner-logo {
+        width: 25px;
+        top: 15px;
+        left: 15px;
+    }
+    
+    .product-options .color-option {
+        width: 25px;
+        height: 25px;
+    }
+
+    .product-gallery .main-image img {
+        max-width: 100%;
+        max-height: 370px; /* Set a max height for the main image */
+    }
+}
+
+.measurement-option {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.measurement-option input[type="radio"] {
+    margin-right: 10px;
+}
+
+.measurement-option label {
+    font-weight: normal;
+}
+
+.add-to-cart-feedback {
+    position: fixed;
+    top: 20%;
+    right: 20%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    transition: opacity 0.5s ease-in-out;
+}

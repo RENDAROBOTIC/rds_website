@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tactical Bull Quick-Release Buckle - R Design Supply</title>
+    <link rel="stylesheet" href="/style_sheet/styles.css">
+    <link rel="stylesheet" href="/style_sheet/product_detail.css">
+
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="/renda_design_supply.html">
+                <img src="https://res.cloudinary.com/ds4bmw1nd/image/upload/v1756387201/rds_logo_hbqnog.png" alt="Renda Design Supply">
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/tools/tools.html">Tools</a></li>
+                <li><a href="/n&t/n&t.html">Notions and Trims</a></li>
+                <li><a href="/event/event.html">Events</a></li>
+                <li><a href="/support/support.html">Support</a></li>
+            </ul>
+        </nav>
+        <div class="search-cart">
+            <form id="searchForm" action="../search/search-results.html" method="get">
+                <input type="text" id="searchInput" name="q" placeholder="">
+                <button type="submit"></button>
+            </form>
+            <div class="cart-link">
+                <a href="/checkout/cart.html">
+                    <img src="https://res.cloudinary.com/ds4bmw1nd/image/upload/cart.png" alt="Cart">
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="product-detail">
+            <div class="product-gallery">
+                <div class="main-image">
+                    <img src="https://res.cloudinary.com/ds4bmw1nd/image/upload/Black_Bull_Buckle.jpg" alt="Tactical Bull Quick-Release Buckle" id="mainImage">
+                </div>
+                <div class="thumbnail-container">
+                    <img src="https://res.cloudinary.com/ds4bmw1nd/image/upload/Black_Bull_Buckle.jpg" alt="Bull Buckle - Front View" class="thumbnail active" onclick="changeImage(this, 'https://res.cloudinary.com/ds4bmw1nd/image/upload/Black_Bull_Buckle.jpg')">
+                    <img src="https://res.cloudinary.com/ds4bmw1nd/image/upload/Black_Bull_Buckle-2.jpg" alt="Bull Buckle - Connected View" class="thumbnail" onclick="changeImage(this, 'https://res.cloudinary.com/ds4bmw1nd/image/upload/Black_Bull_Buckle-2.jpg')">
+                    <img src="https://res.cloudinary.com/ds4bmw1nd/image/upload/Black_Bull_Buckle-3.jpg" alt="Bull Buckle - Side View" class="thumbnail" onclick="changeImage(this, 'https://res.cloudinary.com/ds4bmw1nd/image/upload/Black_Bull_Buckle-3.jpg')">
+                </div>
+            </div>
+            <div class="product-info">
+                <h1>Tactical Bull Quick-Release Buckle</h1>
+                <p class="price">$12</p>
+                
+                <div class="product-options">
+                    <label>Size:</label>
+                    <div class="size-options">
+                        <div class="size-option">
+                            <input type="radio" id="size-25mm" name="size" value="25mm" checked onchange="updatePrice()">
+                            <label for="size-25mm">25mm (1 inch) - $12.00</label>
+                        </div>
+                        <div class="size-option">
+                            <input type="radio" id="size-38mm" name="size" value="38mm" onchange="updatePrice()">
+                            <label for="size-38mm">38mm (1.5 inch) - $14.00</label>
+                        </div>
+                    </div>
+                    
+                    <label>Color:</label>
+                    <div class="color-options">
+                        <div class="color-options">
+                            <div class="color-option black selected" onclick="selectColor(this, 'Black')"></div>
+                        </div>
+                        <div class="color-options">
+                            <div class="color-option tan" onclick="selectColor(this, 'Tan')"></div>
+                        </div> 
+                    </div>
+                    
+                    <label>Quantity:</label>
+                    <div class="quantity-selector">
+                        <button onclick="decrementQuantity()">-</button>
+                        <input type="number" id="quantity" value="1" min="1" max="50">
+                        <button onclick="incrementQuantity()">+</button>
+                    </div>
+                    
+                    <button class="btn" onclick="addToCart()">Add to Cart</button>
+                </div>
+            </div>
+            
+            <div class="product-description">
+                <h2>Product Description</h2>
+                <p>The Tactical Bull Quick-Release Buckle is a premium metal hardware component designed for heavy-duty applications where strength and reliability are paramount. Featuring the distinctive bull logo embossed on its surface, this professional-grade buckle offers tactical functionality with a unique design aesthetic.</p>
+                
+                <p>Made from durable, high-tensile strength alloy with a matte black finish, this quick-release buckle is ideal for tactical gear, heavy-duty bags, outdoor equipment, and fashion applications requiring dependable closures.</p>
+                
+                <div class="product-features">
+                    <h3>Features:</h3>
+                    <ul>
+                        <li>Heavy-duty metal construction with matte finish</li>
+                        <li>Quick-release mechanism for easy operation</li>
+                        <li>Secure locking system prevents accidental opening</li>
+                        <li>Embossed bull logo design for distinctive look</li>
+                        <li>Available in 25mm (1 inch) and 38mm (1.5 inch) widths</li>
+                        <li>Corrosion-resistant coating for extended durability</li>
+                        <li>Compatible with standard webbing straps</li>
+                        <li>Tactical-inspired design for both functionality and aesthetics</li>
+                        <li>Ideal for bags, backpacks, belts, and outdoor equipment</li>
+                    </ul>
+                </div>
+                
+                <h3>Technical Specifications:</h3>
+                <ul>
+                    <li>Material: Zinc alloy with matte finish</li>
+                    <li>Available widths: 25mm (1 inch) and 38mm (1.5 inch)</li>
+                    <li>Colors: Black, Tan</li>
+                    <li>Weight capacity: Rated for up to 150kg (330lbs) static load</li>
+                    <li>Release mechanism: Single-hand operation with side release tabs</li>
+                </ul>
+                
+                <h3>Care Instructions:</h3>
+                <p>Clean with mild soap and water as needed. Avoid exposure to harsh chemicals that may damage the finish. Periodically check for proper functioning of the release mechanism. Store in dry conditions to prevent corrosion.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>RDS. &copy; 2025</p> 
+        </div>
+    </footer>
+    
+    <script>
+    // Check if localStorage is available
+    function isLocalStorageAvailable() {
+        try {
+            const test = 'test';
+            localStorage.setItem(test, test);
+            localStorage.removeItem(test);
+            return true;
+        } catch(e) {
+            return false;
+        }
+    }
+
+    // Debug logging function
+    function debugLog(message) {
+        console.log(`[DEBUG] ${message}`);
+    }
+
+    function changeImage(thumbnail, newSrc) {
+        // Update main image
+        document.getElementById('mainImage').src = newSrc;
+        
+        // Update active thumbnail
+        let thumbnails = document.querySelectorAll('.thumbnail');
+        thumbnails.forEach(thumb => {
+            thumb.classList.remove('active');
+        });
+        thumbnail.classList.add('active');
+        debugLog(`Image changed to: ${newSrc}`);
+    }
+
+    function selectColor(element, colorName) {
+        // Update selected color styling
+        let colorOptions = document.querySelectorAll('.color-option');
+        colorOptions.forEach(option => {
+            option.classList.remove('selected');
+        });
+        element.classList.add('selected');
+        
+        console.log(`Selected color: ${colorName}`);
+    }
+    
+    function updatePrice() {
+        const sizeOptions = document.getElementsByName('size');
+        let price;
+        let size;
+        
+        for (let i = 0; i < sizeOptions.length; i++) {
+            if (sizeOptions[i].checked) {
+                size = sizeOptions[i].value;
+                break;
+            }
+        }
+        
+        switch(size) {
+            case '25mm':
+                price = '$12.00';
+                break;
+            case '38mm':
+                price = '$14.00';
+                break;
+            default:
+                price = '$12.00';
+        }
+        
+        document.querySelector('.price').innerText = price;
+        debugLog(`Price updated to: ${price} for ${size} size`);
+    }
+    
+    function incrementQuantity() {
+        event.preventDefault();
+        const quantityInput = document.getElementById('quantity');
+        if (quantityInput.value < 100) {
+            quantityInput.value = parseInt(quantityInput.value) + 1;
+            debugLog(`Quantity incremented to: ${quantityInput.value}`);
+        }
+    }
+    
+    function decrementQuantity() {
+        event.preventDefault();
+        const quantityInput = document.getElementById('quantity');
+        if (quantityInput.value > 1) {
+            quantityInput.value = parseInt(quantityInput.value) - 1;
+            debugLog(`Quantity decremented to: ${quantityInput.value}`);
+        }
+    }
+
+    function showAddToCartFeedback(quantity, size, color, price) {
+        // Create a feedback element
+        const feedback = document.createElement('div');
+        feedback.className = 'add-to-cart-feedback';
+        
+        // Determine size display text
+        let sizeDisplay;
+        switch(size) {
+            case '25mm':
+                sizeDisplay = "25mm (1 inch)";
+                break;
+            case '38mm':
+                sizeDisplay = "38mm (1.5 inch)";
+                break;
+        }
+        
+        feedback.innerHTML = `
+            <div class="feedback-content">
+                <p>✓ Added to cart: ${quantity} Tactical Bull Quick-Release Buckle</p>
+                <p>Size: ${sizeDisplay}, Color: ${color}, Price: $${price.toFixed(2)}</p>
+            </div>
+        `;
+        
+        // Add styles
+        feedback.style.position = 'fixed';
+        feedback.style.top = '20%';
+        feedback.style.right = '20%';
+        feedback.style.backgroundColor = '#4CAF50';
+        feedback.style.color = 'white';
+        feedback.style.padding = '15px';
+        feedback.style.borderRadius = '5px';
+        feedback.style.zIndex = '1000';
+        feedback.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+        feedback.style.transition = 'opacity 0.5s ease-in-out';
+        
+        document.body.appendChild(feedback);
+        
+        // Show then fade out
+        setTimeout(() => {
+            feedback.style.opacity = '0';
+            setTimeout(() => {
+                if (document.body.contains(feedback)) {
+                    document.body.removeChild(feedback);
+                }
+            }, 500);
+        }, 3000);
+
+        debugLog('Cart feedback displayed');
+    }
+    
+    function addToCart() {
+        if (!isLocalStorageAvailable()) {
+            alert("Unable to access local storage. Please check your browser settings or try a different browser.");
+            return;
+        }
+
+        debugLog('Add to cart button clicked');
+        
+        // Get size and color
+        const sizeOptions = document.getElementsByName('size');
+        const colorElement = document.querySelector('.color-option.selected');
+        let size;
+        let color = 'Black'; // Default
+
+        if (colorElement) {
+            if (colorElement.classList.contains('tan')) {
+                color = 'Tan';
+            } else if (colorElement.classList.contains('silver')) {
+                color = 'Silver';
+            }
+        }
+        
+        for (let i = 0; i < sizeOptions.length; i++) {
+            if (sizeOptions[i].checked) {
+                size = sizeOptions[i].value;
+                break;
+            }
+        }
+        
+        const quantity = parseInt(document.getElementById('quantity').value);
+
+        if (quantity < 1 || quantity > 100) {
+            alert('Please enter a quantity between 1 and 100.');
+            return;
+        }
+
+        let price; 
+        let sizeDisplay;
+        
+        switch(size) {
+            case '25mm':
+                price = 12.00;
+                sizeDisplay = "25mm (1 inch)";
+                break;
+            case '38mm':
+                price = 14.00;
+                sizeDisplay = "38mm (1.5 inch)";
+                break;
+            default:
+                price = 12.00;
+                sizeDisplay = "25mm (1 inch)";
+        }
+
+        // Create standardized cart item object
+        const newItem = {
+            id: Date.now() + Math.random(), // Unique ID
+            name: 'Tactical Bull Quick-Release Buckle',
+            size: size,
+            sizeDisplay: sizeDisplay,
+            color: color,
+            price: price,
+            quantity: quantity,
+            total: price * quantity
+        };
+
+        debugLog(`Cart item created: ${JSON.stringify(newItem)}`);
+
+        try {
+            // Retrieve existing cart items from localStorage
+            let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+            debugLog(`Retrieved ${cartItems.length} existing items from localStorage`);
+
+            // Check if identical item already exists (same product, size and color)
+            const existingItemIndex = cartItems.findIndex(item => 
+                item.name === newItem.name && 
+                item.size === newItem.size &&
+                item.color === newItem.color
+            );
+            
+            if (existingItemIndex !== -1) {
+                // Update existing item quantity instead of adding new one
+                cartItems[existingItemIndex].quantity += quantity;
+                cartItems[existingItemIndex].total = cartItems[existingItemIndex].price * cartItems[existingItemIndex].quantity;
+                debugLog(`Updated existing item quantity to ${cartItems[existingItemIndex].quantity}`);
+            } else {
+                // Add new item
+                cartItems.push(newItem);
+                debugLog('Added new item to cart');
+            }
+
+            // Save updated cart items back to localStorage
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            debugLog(`Saved ${cartItems.length} items to localStorage`);
+            
+            // Display success message
+            showAddToCartFeedback(quantity, size, color, price);
+            
+        } catch (error) {
+            console.error('Error adding to cart:', error);
+            alert("There was a problem adding the item to your cart. Please try again.");
+        }
+    }
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+        // Verify localStorage works on page load
+        if (!isLocalStorageAvailable()) {
+            console.error("localStorage is not available. Cart functionality will be limited.");
+        } else {
+            debugLog('localStorage is available. Cart functionality should work.');
+        }
+        
+        // Set initial price
+        updatePrice();
+    });
+</script>
+</body>
+</html>
