@@ -51,6 +51,7 @@ app.post("/api/create-checkout-session", async (req, res) => {
     // Add tax as a separate line item
     const subtotal = lineItems.reduce((sum, item) => sum + (item.amount * item.quantity), 0);
     const taxAmount = Math.round(subtotal * taxRate.total);
+    const path = require('path');
     
     if (taxAmount > 0) {
       stripeLineItems.push({
@@ -109,3 +110,7 @@ app.post('/api/webhook', express.raw({type: 'application/json'}), (req, res) => 
 });
 
 app.listen(4242, () => console.log("Secure server running on port 4242"));
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'renda_design_supply.html'));
+});
