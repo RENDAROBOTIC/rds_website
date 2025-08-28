@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kearing Metal Edge Cutting Ruler - R Design Supply</title>
+    <link rel="stylesheet" href="/style_sheet/styles.css">
+    <link rel="stylesheet" href="/style_sheet/product_detail.css">
+
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="/renda_design_supply.html">
+                <img src="/images/rds_logo.png" alt="Renda Design Supply">
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/tools/tools.html">Tools</a></li>
+                <li><a href="/n&t/n&t.html">Notions and Trims</a></li>
+                <li><a href="/event/event.html">Events</a></li>
+                <li><a href="/support/support.html">Support</a></li>
+            </ul>
+        </nav>
+        <div class="search-cart">
+            <form id="searchForm" action="../search/search-results.html" method="get">
+                <input type="text" id="searchInput" name="q" placeholder="">
+                <button type="submit"></button>
+            </form>
+            <div class="cart-link">
+                <a href="/checkout/cart.html">
+                    <img src="/images/cart.png" alt="Cart">
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="product-detail">
+            <div class="product-gallery">
+                <div class="main-image">
+                    <img src="/images/tools/rulers/Kearing_Metal_Edge_Cutting_Ruler.jpg" alt="Kearing Metal Edge Cutting Ruler" id="mainImage">
+                </div>
+                <div class="thumbnail-container">
+                    <img src="/images/tools/rulers/Kearing_Metal_Edge_Cutting_Ruler.jpg" alt="Kearing Metal Edge Ruler - Front View" class="thumbnail active" onclick="changeImage(this, '/images/tools/rulers/Kearing_Metal_Edge_Cutting_Ruler.jpg')">
+                    <img src="/images/tools/rulers/Kearing_Metal_Edge_Cutting_Ruler-2.jpg" alt="Kearing Metal Edge Ruler - Side View" class="thumbnail" onclick="changeImage(this, '/images/tools/rulers/Kearing_Metal_Edge_Cutting_Ruler-2.jpg')">
+                    <img src="/images/tools/rulers/Kearing_Metal_Edge_Cutting_Ruler-3.jpg" alt="Kearing Metal Edge Ruler - Detail View" class="thumbnail" onclick="changeImage(this, '/images/tools/rulers/Kearing_Metal_Edge_Cutting_Ruler-3.jpg')">
+                </div>
+            </div>
+            <div class="product-info">
+                <h1>Kearing Metal Edge Cutting Ruler</h1>
+                <p class="price">$53</p>
+                
+                <div class="product-options">
+                    <label>Measurement Type:</label>
+                    <div class="measurement-options">
+                        <!-- <div class="measurement-option">
+                            <input type="radio" id="imperial" name="measurement" value="imperial" checked onchange="updatePrice()">
+                            <label for="imperial">Imperial (24 inch) - $18.95</label>
+                        </div> -->
+                        <div class="measurement-option">
+                            <input type="radio" id="metric" name="measurement" value="metric" onchange="updatePrice()">
+                            <label for="metric">Metric (60 cm) - $53</label>
+                        </div>
+                        <!-- <div class="measurement-option">
+                            <input type="radio" id="dual" name="measurement" value="dual" onchange="updatePrice()">
+                            <label for="dual">Dual Scale (36 inch/90 cm) - $28.95</label>
+                        </div> -->
+                    </div>
+                    
+                    <label>Quantity:</label>
+                    <div class="quantity-selector">
+                        <button onclick="decrementQuantity()">-</button>
+                        <input type="number" id="quantity" value="1" min="1" max="10">
+                        <button onclick="incrementQuantity()">+</button>
+                    </div>
+                    
+                    <button class="btn" onclick="addToCart()">Add to Cart</button>
+                </div>
+            </div>
+            
+            <div class="product-description">
+                <h2>Product Description</h2>
+                <p>The Kearing Metal Edge Cutting Ruler is an essential tool for precision cutting in fashion design, pattern making, and crafting projects. Featuring a stainless steel edge guard that protects your fingers while providing a smooth, straight cutting surface for rotary cutters and craft knives.</p>
+                
+                <p>This professional-grade ruler combines durability with accuracy, making it ideal for students, designers, and craftspeople who demand reliability and precision in their work.</p>
+                
+                <div class="product-features">
+                    <h3>Features:</h3>
+                    <ul>
+                        <li>Anti-slip cork backing for secure positioning</li>
+                        <li>Raised metal edge guard for safe, accurate cutting</li>
+                        <li>Clear, easy-to-read measurement markings</li>
+                        <li>Available in imperial, metric, or dual scale measurements</li>
+                        <li>Heavy-duty aluminum construction resists bending</li>
+                        <li>Beveled edges for comfortable handling</li>
+                        <li>Hanging hole for convenient storage</li>
+                        <li>Perfect for use with rotary cutters and craft knives</li>
+                    </ul>
+                </div>
+                
+                <h3>Care Instructions:</h3>
+                <p>Wipe clean with a dry cloth. Avoid exposing to moisture to prevent corrosion. Store flat or hanging to maintain straightness. Do not drop or bend the ruler as this may affect its accuracy.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>RDS. &copy; 2025</p> 
+        </div>
+    </footer>
+    
+    <script>
+    // Check if localStorage is available
+    function isLocalStorageAvailable() {
+        try {
+            const test = 'test';
+            localStorage.setItem(test, test);
+            localStorage.removeItem(test);
+            return true;
+        } catch(e) {
+            return false;
+        }
+    }
+
+    // Debug logging function
+    function debugLog(message) {
+        console.log(`[DEBUG] ${message}`);
+    }
+
+    function changeImage(thumbnail, newSrc) {
+        document.getElementById('mainImage').src = newSrc;
+        
+        let thumbnails = document.querySelectorAll('.thumbnail');
+        thumbnails.forEach(thumb => {
+            thumb.classList.remove('active');
+        });
+        thumbnail.classList.add('active');
+        debugLog(`Image changed to: ${newSrc}`);
+    }
+    
+    function updatePrice() {
+        const measurementOptions = document.getElementsByName('measurement');
+        let price;
+        let measurementType;
+        
+        for (let i = 0; i < measurementOptions.length; i++) {
+            if (measurementOptions[i].checked) {
+                measurementType = measurementOptions[i].value;
+                break;
+            }
+        }
+        
+        // Note: Only metric option is available in HTML, but keeping switch for consistency
+        switch(measurementType) {
+            case 'metric':
+                price = '$53.00';
+                break;
+            default:
+                price = '$53.00';
+        }
+        
+        document.querySelector('.price').innerText = price;
+        debugLog(`Price updated to: ${price} for ${measurementType} measurement`);
+    }
+    
+    function incrementQuantity() {
+        event.preventDefault();
+        const quantityInput = document.getElementById('quantity');
+        if (quantityInput.value < 100) {
+            quantityInput.value = parseInt(quantityInput.value) + 1;
+            debugLog(`Quantity incremented to: ${quantityInput.value}`);
+        }
+    }
+    
+    function decrementQuantity() {
+        event.preventDefault();
+        const quantityInput = document.getElementById('quantity');
+        if (quantityInput.value > 1) {
+            quantityInput.value = parseInt(quantityInput.value) - 1;
+            debugLog(`Quantity decremented to: ${quantityInput.value}`);
+        }
+    }
+
+    function showAddToCartFeedback(quantity, measurementType, price) {
+        const feedback = document.createElement('div');
+        feedback.className = 'add-to-cart-feedback';
+        
+        let measurementDisplay = "Metric (60 cm)";
+        
+        feedback.innerHTML = `
+            <div class="feedback-content">
+                <p>✓ Added to cart: ${quantity} Kearing Metal Edge Cutting Ruler</p>
+                <p>Type: ${measurementDisplay}, Price: $${price.toFixed(2)}</p>
+            </div>
+        `;
+        
+        // Add styles
+        feedback.style.position = 'fixed';
+        feedback.style.top = '20%';
+        feedback.style.right = '20%';
+        feedback.style.backgroundColor = '#4CAF50';
+        feedback.style.color = 'white';
+        feedback.style.padding = '15px';
+        feedback.style.borderRadius = '5px';
+        feedback.style.zIndex = '1000';
+        feedback.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+        feedback.style.transition = 'opacity 0.5s ease-in-out';
+        
+        document.body.appendChild(feedback);
+        
+        setTimeout(() => {
+            feedback.style.opacity = '0';
+            setTimeout(() => {
+                if (document.body.contains(feedback)) {
+                    document.body.removeChild(feedback);
+                }
+            }, 500);
+        }, 3000);
+
+        debugLog('Cart feedback displayed');
+    }
+    
+    function addToCart() {
+        if (!isLocalStorageAvailable()) {
+            alert("Unable to access local storage. Please check your browser settings or try a different browser.");
+            return;
+        }
+
+        debugLog('Add to cart button clicked');
+        
+        const measurementOptions = document.getElementsByName('measurement');
+        let measurementType = 'metric'; // Default since only metric is available
+        
+        // Check which option is selected (even though only one exists)
+        for (let i = 0; i < measurementOptions.length; i++) {
+            if (measurementOptions[i].checked) {
+                measurementType = measurementOptions[i].value;
+                break;
+            }
+        }
+        
+        const quantity = parseInt(document.getElementById('quantity').value);
+
+        if (quantity < 1 || quantity > 100) {
+            alert('Please enter a quantity between 1 and 100.');
+            return;
+        }
+
+        const price = 53.00;
+        const measurementDisplay = "Metric (60 cm)";
+
+        // Create standardized cart item object
+        const newItem = {
+            id: Date.now() + Math.random(),
+            name: 'Kearing Metal Edge Cutting Ruler',
+            size: measurementType,
+            sizeDisplay: measurementDisplay,
+            color: 'N/A',
+            price: price,
+            quantity: quantity,
+            total: price * quantity
+        };
+
+        debugLog(`Cart item created: ${JSON.stringify(newItem)}`);
+
+        try {
+            let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+            debugLog(`Retrieved ${cartItems.length} existing items from localStorage`);
+
+            // Check if identical item already exists
+            const existingItemIndex = cartItems.findIndex(item => 
+                item.name === newItem.name && 
+                item.size === newItem.size
+            );
+            
+            if (existingItemIndex !== -1) {
+                cartItems[existingItemIndex].quantity += quantity;
+                cartItems[existingItemIndex].total = cartItems[existingItemIndex].price * cartItems[existingItemIndex].quantity;
+                debugLog(`Updated existing item quantity to ${cartItems[existingItemIndex].quantity}`);
+            } else {
+                cartItems.push(newItem);
+                debugLog('Added new item to cart');
+            }
+
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            debugLog(`Saved ${cartItems.length} items to localStorage`);
+            
+            showAddToCartFeedback(quantity, measurementType, price);
+            
+        } catch (error) {
+            console.error('Error adding to cart:', error);
+            alert("There was a problem adding the item to your cart. Please try again.");
+        }
+    }
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+        if (!isLocalStorageAvailable()) {
+            console.error("localStorage is not available. Cart functionality will be limited.");
+        } else {
+            debugLog('localStorage is available. Cart functionality should work.');
+        }
+        
+        updatePrice();
+    });
+</script>
+</body>
+</html>
