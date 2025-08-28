@@ -2,6 +2,7 @@ require("dotenv").config();
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const express = require("express");
 const app = express();
+const path = require('path');
 
 app.use(express.static("."));
 app.use(express.urlencoded({ extended: true }));
@@ -51,7 +52,6 @@ app.post("/api/create-checkout-session", async (req, res) => {
     // Add tax as a separate line item
     const subtotal = lineItems.reduce((sum, item) => sum + (item.amount * item.quantity), 0);
     const taxAmount = Math.round(subtotal * taxRate.total);
-    const path = require('path');
     
     if (taxAmount > 0) {
       stripeLineItems.push({
