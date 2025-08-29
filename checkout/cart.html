@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - R Design Supply</title>
+    <link rel="stylesheet" href="/style_sheet/styles.css">
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        .cart-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .cart-item {
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 8px;
+            background: #fff;
+        }
+        .item-details h4 {
+            margin: 0 0 8px 0;
+            font-size: 18px;
+        }
+        .item-specs {
+            color: #666;
+            margin: 0;
+            font-size: 14px;
+        }
+        .item-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .quantity-controls button {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            background: #f5f5f5;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .quantity-controls button:hover {
+            background: #e5e5e5;
+        }
+        .remove-btn {
+            padding: 8px 15px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .remove-btn:hover {
+            background: #c82333;
+        }
+        .cart-summary {
+            border-top: 2px solid #333;
+            padding-top: 20px;
+            margin-top: 30px;
+            text-align: right;
+        }
+        .cart-summary h3 {
+            font-size: 24px;
+            margin: 10px 0;
+        }
+        #checkout-button {
+            padding: 15px 30px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        #checkout-button:hover {
+            background: #0056b3;
+        }
+        #checkout-button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+        .empty-cart {
+            text-align: center;
+            padding: 50px 20px;
+            color: #666;
+            font-size: 18px;
+        }
+        .error-message {
+            color: #dc3545;
+            background: #f8d7da;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .province-selector {
+            margin: 15px 0;
+            text-align: right;
+        }
+        .province-selector select {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="/renda_design_supply.html">
+                <img src="https://res.cloudinary.com/ds4bmw1nd/image/upload/v1756387201/rds_logo_hbqnog.png" alt="Renda Design Supply">
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/tools/tools.html">Tools</a></li>
+                <li><a href="/n&t/n&t.html">Notions and Trims</a></li>
+                <li><a href="/event/event.html">Events</a></li>
+                <li><a href="/support/support.html">Support</a></li>
+            </ul>
+        </nav>
+        <div class="search-cart">
+            <form id="searchForm" action="../search/search-results.html" method="get">
+                <input type="text" id="searchInput" name="q" placeholder="">
+                <button type="submit"></button>
+            </form>
+            <div class="cart-link">
+                <a href="/checkout/cart.html">
+                    <img src="https://res.cloudinary.com/ds4bmw1nd/image/upload/cart.png" alt="Cart">
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="cart-container">
+            <h1>Your Shopping Cart</h1>
+            <div id="cart-items">
+                <!-- Cart items will be loaded here -->
+            </div>
+            
+            <div id="cart-summary" style="display: none;">
+                <div class="province-selector">
+                    <label for="province-select">Province (for tax calculation): </label>
+                    <select id="province-select" onchange="updateTaxes()">
+                        <option value="BC">BC - 12% (GST + PST)</option>
+                        <!-- <option value="AB">AB - 5% (GST)</option>
+                        <option value="ON">ON - 13% (HST)</option>
+                        <option value="QC">QC - 14.975% (GST + QST)</option>
+                        <option value="SK">SK - 11% (GST + PST)</option>
+                        <option value="MB">MB - 12% (GST + PST)</option>
+                        <option value="NB">NB - 15% (HST)</option>
+                        <option value="NS">NS - 15% (HST)</option>
+                        <option value="PE">PE - 15% (HST)</option>
+                        <option value="NL">NL - 15% (HST)</option> -->
+                    </select>
+                </div>
+                
+                <div class="tax-breakdown">
+                    <p>Subtotal: $<span id="subtotal">0.00</span></p>
+                    <p>Tax (<span id="tax-rate">12%</span>): $<span id="tax-amount">0.00</span></p>
+                    <h3>Total: $<span id="total-amount">0.00</span></h3>
+                </div>
+                
+                <button id="checkout-button">Checkout with Stripe</button>
+                <div id="payment-message" class="error-message" style="display: none;"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>RDS. &copy; 2025</p> 
+    </footer>
+
+    <script>
+        let cartItems = [];
+        let stripe;
+
+        // Tax rates by province
+        const TAX_RATES = {
+            'BC': { rate: 0.12, name: '12% (GST + PST)' },
+            'AB': { rate: 0.05, name: '5% (GST)' },
+            'ON': { rate: 0.13, name: '13% (HST)' },
+            'QC': { rate: 0.14975, name: '14.975% (GST + QST)' },
+            'SK': { rate: 0.11, name: '11% (GST + PST)' },
+            'MB': { rate: 0.12, name: '12% (GST + PST)' },
+            'NB': { rate: 0.15, name: '15% (HST)' },
+            'NS': { rate: 0.15, name: '15% (HST)' },
+            'PE': { rate: 0.15, name: '15% (HST)' },
+            'NL': { rate: 0.15, name: '15% (HST)' }
+        };
+
+        // Initialize Stripe
+        async function initializeStripe() {
+            try {
+                const response = await fetch('/api/config');
+                const { publishableKey } = await response.json();
+                stripe = Stripe(publishableKey);
+                console.log('Stripe initialized securely');
+            } catch (error) {
+                console.error('Error initializing Stripe:', error);
+                showError('Payment system unavailable. Please try again later.');
+            }
+        }
+
+        // Load cart items from localStorage
+        function loadCartItems() {
+            try {
+                const stored = localStorage.getItem('cartItems');
+                if (stored) {
+                    cartItems = JSON.parse(stored);
+                    console.log('Loaded cart items:', cartItems);
+                } else {
+                    cartItems = [];
+                }
+                displayCart();
+            } catch (error) {
+                console.error('Error loading cart:', error);
+                showError('Error loading cart items.');
+            }
+        }
+
+        // Display cart items
+        function displayCart() {
+            const container = document.getElementById('cart-items');
+            const summary = document.getElementById('cart-summary');
+            
+            if (!cartItems || cartItems.length === 0) {
+                container.innerHTML = '<div class="empty-cart">Your cart is empty<br><a href="/renda_design_supply.html">Continue Shopping</a></div>';
+                summary.style.display = 'none';
+                return;
+            }
+            
+            summary.style.display = 'block';
+            container.innerHTML = '';
+            
+            cartItems.forEach(item => {
+                // Handle different data formats from your existing products
+                const displaySize = item.size || item.sizeDisplay || item.measurementName || item.variantDisplay || 'Standard';
+                const displayColor = item.color && item.color !== 'N/A' ? item.color : null;
+                
+                container.innerHTML += `
+                    <div class="cart-item">
+                        <div class="item-details">
+                            <h4>${item.name}</h4>
+                            <p class="item-specs">
+                                ${displaySize}${displayColor ? ', Color: ' + displayColor : ''}
+                            </p>
+                        </div>
+                        <div class="item-controls">
+                            <div class="item-price">
+                                <strong>$${item.price.toFixed(2)} each</strong>
+                            </div>
+                            <div class="quantity-controls">
+                                <button onclick="updateQuantity(${item.id}, -1)">-</button>
+                                <span>Qty: ${item.quantity}</span>
+                                <button onclick="updateQuantity(${item.id}, 1)">+</button>
+                            </div>
+                            <div class="item-total">
+                                <strong>$${(item.price * item.quantity).toFixed(2)}</strong>
+                            </div>
+                            <button class="remove-btn" onclick="removeItem(${item.id})">Remove</button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            updateTaxes();
+        }
+
+        // Update item quantity
+        function updateQuantity(itemId, change) {
+            const itemIndex = cartItems.findIndex(item => item.id === itemId);
+            if (itemIndex !== -1) {
+                const newQuantity = cartItems[itemIndex].quantity + change;
+                if (newQuantity <= 0) {
+                    removeItem(itemId);
+                } else {
+                    cartItems[itemIndex].quantity = newQuantity;
+                    cartItems[itemIndex].total = cartItems[itemIndex].price * newQuantity;
+                    saveCart();
+                    displayCart();
+                }
+            }
+        }
+
+        // Remove item from cart
+        function removeItem(itemId) {
+            cartItems = cartItems.filter(item => item.id !== itemId);
+            saveCart();
+            displayCart();
+        }
+
+        // Save cart to localStorage
+        function saveCart() {
+            try {
+                localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            } catch (error) {
+                console.error('Error saving cart:', error);
+                showError('Error saving cart changes.');
+            }
+        }
+
+        // Update tax calculations
+        function updateTaxes() {
+            const province = document.getElementById('province-select').value;
+            const taxInfo = TAX_RATES[province];
+            
+            const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const taxAmount = subtotal * taxInfo.rate;
+            const total = subtotal + taxAmount;
+            
+            document.getElementById('subtotal').textContent = subtotal.toFixed(2);
+            document.getElementById('tax-rate').textContent = taxInfo.name;
+            document.getElementById('tax-amount').textContent = taxAmount.toFixed(2);
+            document.getElementById('total-amount').textContent = total.toFixed(2);
+        }
+
+        // Show error message
+        function showError(message) {
+            const errorDiv = document.getElementById('payment-message');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+
+        // Checkout with Stripe
+        document.getElementById('checkout-button').addEventListener('click', async function() {
+            if (!stripe) {
+                showError('Payment system is loading. Please wait and try again.');
+                return;
+            }
+            
+            if (!cartItems || cartItems.length === 0) {
+                showError('Your cart is empty!');
+                return;
+            }
+            
+            const button = this;
+            button.disabled = true;
+            button.textContent = 'Processing...';
+            
+            try {
+                const province = document.getElementById('province-select').value;
+                
+                // Prepare line items for Stripe
+                const lineItems = cartItems.map(item => {
+                    const displaySize = item.size || item.sizeDisplay || item.measurementName || item.variantDisplay || 'Standard';
+                    const displayColor = item.color && item.color !== 'N/A' ? item.color : null;
+                    
+                    return {
+                        name: item.name,
+                        description: `${displaySize}${displayColor ? ', Color: ' + displayColor : ''}`,
+                        amount: Math.round(item.price * 100), // Convert to cents
+                        quantity: item.quantity,
+                    };
+                });
+                
+                const response = await fetch('/api/create-checkout-session', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ 
+                        lineItems: lineItems,
+                        province: province
+                    }),
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const { sessionId } = await response.json();
+                
+                // Redirect to Stripe Checkout
+                const result = await stripe.redirectToCheckout({
+                    sessionId: sessionId,
+                });
+                
+                if (result.error) {
+                    throw new Error(result.error.message);
+                }
+                
+            } catch (error) {
+                console.error('Checkout error:', error);
+                showError('Checkout failed. Please try again.');
+            } finally {
+                button.disabled = false;
+                button.textContent = 'Checkout with Stripe';
+            }
+        });
+
+        // Initialize everything when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCartItems();
+            initializeStripe();
+        });
+    </script>
+</body>
+</html>
