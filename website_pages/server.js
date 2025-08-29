@@ -24,6 +24,10 @@ app.get('/api/config', (req, res) => {
   });
 });
 
+app.get('/test', (req, res) => {
+  res.send('Server is working!');
+});
+
 // Create checkout session with Canadian tax calculation
 app.post("/api/create-checkout-session", async (req, res) => {
   try {
