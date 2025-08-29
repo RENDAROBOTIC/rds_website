@@ -4,6 +4,10 @@
     {
       "src": "server.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "!(server.js)",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
@@ -12,20 +16,44 @@
       "dest": "/server.js"
     },
     {
-      "src": "/(.*\\.(css|js|png|jpg|jpeg|gif|svg|ico))",
-      "dest": "/$1"
+      "src": "/style_sheet/(.*)",
+      "dest": "/style_sheet/$1"
     },
     {
-      "src": "/(.*)\\.(html)$",
-      "dest": "/$1.html"
+      "src": "/checkout/(.*)",
+      "dest": "/checkout/$1"
+    },
+    {
+      "src": "/tools/(.*)",
+      "dest": "/tools/$1"
+    },
+    {
+      "src": "/n&t/(.*)",
+      "dest": "/n&t/$1"
+    },
+    {
+      "src": "/products/(.*)",
+      "dest": "/products/$1"
+    },
+    {
+      "src": "/search/(.*)",
+      "dest": "/search/$1"
+    },
+    {
+      "src": "/support/(.*)",
+      "dest": "/support/$1"
+    },
+    {
+      "src": "/event/(.*)",
+      "dest": "/event/$1"
     },
     {
       "src": "/",
-      "dest": "renda_design_supply.html"
+      "dest": "/renda_design_supply.html"
     },
     {
       "src": "/(.*)",
-      "dest": "/server.js"
+      "dest": "/$1"
     }
   ]
 }
