@@ -4,27 +4,32 @@ const express = require("express");
 const app = express();
 const path = require('path');
 
-app.use(express.static("."));
-app.use(express.static(".", {
-  setHeaders: (res, path) => {
-    if (path.endsWith('.css')) {
-      res.setHeader('Content-Type', 'text/css');
-    }
-  }
-}));
+// Middleware
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// Serve static files with proper MIME types
+app.use(express.static(__dirname, {
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.css')) {
+      res.setHeader('Content-Type', 'text/css');
+    } else if (filePath.endsWith('.js')) {
+      res.setHeader('Content-Type', 'application/javascript');
+    } else if (filePath.endsWith('.html')) {
+      res.setHeader('Content-Type', 'text/html');
+    }
+  }
+}));
+
 // Canadian tax rates by province
 const TAX_RATES = {
-  'BC': { gst: 0.05, pst: 0.07, total: 0.12 }, // Vancouver
+  'BC': { gst: 0.05, pst: 0.07, total: 0.12 },
   'AB': { gst: 0.05, pst: 0.00, total: 0.05 },
   'ON': { hst: 0.13, total: 0.13 },
   'QC': { gst: 0.05, pst: 0.09975, total: 0.14975 },
-  // Add other provinces as needed
 };
 
-// Endpoint to get publishable key securely
+// API Routes
 app.get('/api/config', (req, res) => {
   res.json({
     publishableKey: process.env.STRIPE_PUBLISHABLE_KEY
@@ -35,7 +40,6 @@ app.get('/test', (req, res) => {
   res.send('Server is working!');
 });
 
-// Create checkout session with Canadian tax calculation
 app.post("/api/create-checkout-session", async (req, res) => {
   try {
     const { lineItems, province = 'BC' } = req.body;
@@ -44,23 +48,20 @@ app.post("/api/create-checkout-session", async (req, res) => {
       return res.status(400).json({ error: 'No items in cart' });
     }
 
-    // Get tax rate for province
     const taxRate = TAX_RATES[province] || TAX_RATES['BC'];
     
-    // Create line items for Stripe
     const stripeLineItems = lineItems.map(item => ({
       price_data: {
-        currency: 'cad', // Canadian dollars
+        currency: 'cad',
         product_data: {
           name: item.name,
           description: item.description,
         },
-        unit_amount: Math.round(item.amount), // Amount in cents
+        unit_amount: Math.round(item.amount),
       },
       quantity: item.quantity,
     }));
 
-    // Add tax as a separate line item
     const subtotal = lineItems.reduce((sum, item) => sum + (item.amount * item.quantity), 0);
     const taxAmount = Math.round(subtotal * taxRate.total);
     
@@ -81,13 +82,13 @@ app.post("/api/create-checkout-session", async (req, res) => {
       payment_method_types: ['card'],
       line_items: stripeLineItems,
       mode: 'payment',
-      success_url: `${process.env.DOMAIN}/checkout/success.html?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.DOMAIN}/checkout/cart.html`,
+      success_url: `${process.env.DOMAIN || 'https://your-vercel-app.vercel.app'}/checkout/success.html?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${process.env.DOMAIN || 'https://your-vercel-app.vercel.app'}/checkout/cart.html`,
       shipping_address_collection: {
-        allowed_countries: ['CA'], // Canada only
+        allowed_countries: ['CA'],
       },
       automatic_tax: {
-        enabled: false, // We're handling tax manually
+        enabled: false,
       },
     });
 
@@ -99,7 +100,6 @@ app.post("/api/create-checkout-session", async (req, res) => {
   }
 });
 
-// Webhook to handle successful payments
 app.post('/api/webhook', express.raw({type: 'application/json'}), (req, res) => {
   const sig = req.headers['stripe-signature'];
   let event;
@@ -114,14 +114,35 @@ app.post('/api/webhook', express.raw({type: 'application/json'}), (req, res) => 
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
     console.log('Payment successful for session:', session.id);
-    // Add your order fulfillment logic here
   }
 
   res.json({received: true});
 });
 
-app.listen(4242, () => console.log("Secure server running on port 4242"));
-
+// Route handlers for HTML pages
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'renda_design_supply.html'));
 });
+
+// Handle other routes that might need special handling
+app.get('/tools/tools', (req, res) => {
+  res.sendFile(path.join(__dirname, 'tools', 'tools.html'));
+});
+
+app.get('/checkout/cart', (req, res) => {
+  res.sendFile(path.join(__dirname, 'checkout', 'cart.html'));
+});
+
+// Catch-all for other routes - let static serving handle them
+app.get('*', (req, res, next) => {
+  // If it's an API route that wasn't handled above, return 404
+  if (req.path.startsWith('/api/')) {
+    return res.status(404).json({ error: 'API endpoint not found' });
+  }
+  
+  // For everything else, let the static file handler try
+  next();
+});
+
+const port = process.env.PORT || 4242;
+app.listen(port, () => console.log(`Server running on port ${port}`));
