@@ -5,6 +5,13 @@ const app = express();
 const path = require('path');
 
 app.use(express.static("."));
+app.use(express.static(".", {
+  setHeaders: (res, path) => {
+    if (path.endsWith('.css')) {
+      res.setHeader('Content-Type', 'text/css');
+    }
+  }
+}));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
