@@ -21,7 +21,7 @@
     },
     {
       "src": "/",
-      "dest": "/renda_design_supply.html"
+      "dest": "renda_design_supply.html"
     },
     {
       "src": "/(.*)",
