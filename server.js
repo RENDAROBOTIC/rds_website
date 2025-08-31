@@ -8,18 +8,8 @@ const path = require('path');
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Serve static files with proper MIME types
-app.use(express.static(__dirname, {
-  setHeaders: (res, filePath) => {
-    if (filePath.endsWith('.css')) {
-      res.setHeader('Content-Type', 'text/css');
-    } else if (filePath.endsWith('.js')) {
-      res.setHeader('Content-Type', 'application/javascript');
-    } else if (filePath.endsWith('.html')) {
-      res.setHeader('Content-Type', 'text/html');
-    }
-  }
-}));
+// IMPORTANT: Don't use express.static on Vercel for root directory
+// Vercel will handle static files automatically
 
 // Canadian tax rates by province
 const TAX_RATES = {
@@ -27,17 +17,23 @@ const TAX_RATES = {
   'AB': { gst: 0.05, pst: 0.00, total: 0.05 },
   'ON': { hst: 0.13, total: 0.13 },
   'QC': { gst: 0.05, pst: 0.09975, total: 0.14975 },
+  'SK': { gst: 0.05, pst: 0.06, total: 0.11 },
+  'MB': { gst: 0.05, pst: 0.07, total: 0.12 },
+  'NB': { hst: 0.15, total: 0.15 },
+  'NS': { hst: 0.15, total: 0.15 },
+  'PE': { hst: 0.15, total: 0.15 },
+  'NL': { hst: 0.15, total: 0.15 }
 };
 
-// API Routes
+// API Routes ONLY - Let Vercel handle HTML files
 app.get('/api/config', (req, res) => {
   res.json({
     publishableKey: process.env.STRIPE_PUBLISHABLE_KEY
   });
 });
 
-app.get('/test', (req, res) => {
-  res.send('Server is working!');
+app.get('/api/test', (req, res) => {
+  res.json({ message: 'Server is working!', timestamp: new Date().toISOString() });
 });
 
 app.post("/api/create-checkout-session", async (req, res) => {
@@ -55,7 +51,7 @@ app.post("/api/create-checkout-session", async (req, res) => {
         currency: 'cad',
         product_data: {
           name: item.name,
-          description: item.description,
+          description: item.description || '',
         },
         unit_amount: Math.round(item.amount),
       },
@@ -71,6 +67,7 @@ app.post("/api/create-checkout-session", async (req, res) => {
           currency: 'cad',
           product_data: {
             name: `${province} Tax (${(taxRate.total * 100).toFixed(1)}%)`,
+            description: 'Sales Tax',
           },
           unit_amount: taxAmount,
         },
@@ -78,12 +75,15 @@ app.post("/api/create-checkout-session", async (req, res) => {
       });
     }
 
+    // Get the correct domain
+    const domain = process.env.DOMAIN || `https://${req.headers.host}`;
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: stripeLineItems,
       mode: 'payment',
-      success_url: `${process.env.DOMAIN || 'https://your-vercel-app.vercel.app'}/checkout/success.html?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.DOMAIN || 'https://your-vercel-app.vercel.app'}/checkout/cart.html`,
+      success_url: `${domain}/checkout/success.html?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${domain}/checkout/cart.html`,
       shipping_address_collection: {
         allowed_countries: ['CA'],
       },
@@ -100,49 +100,46 @@ app.post("/api/create-checkout-session", async (req, res) => {
   }
 });
 
-app.post('/api/webhook', express.raw({type: 'application/json'}), (req, res) => {
+app.post('/api/webhook', express.raw({type: 'application/json'}), async (req, res) => {
   const sig = req.headers['stripe-signature'];
+  
+  if (!process.env.STRIPE_WEBHOOK_SECRET) {
+    console.log('Webhook secret not configured');
+    return res.json({received: true});
+  }
+
   let event;
 
   try {
     event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
   } catch (err) {
-    console.log(`Webhook signature verification failed.`, err.message);
+    console.log(`Webhook signature verification failed:`, err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
   }
 
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
     console.log('Payment successful for session:', session.id);
+    // Add your fulfillment logic here
   }
 
   res.json({received: true});
 });
 
-// Route handlers for HTML pages
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'renda_design_supply.html'));
+// Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({ 
+    status: 'ok', 
+    timestamp: new Date().toISOString(),
+    stripe_configured: !!process.env.STRIPE_SECRET_KEY
+  });
 });
 
-// Handle other routes that might need special handling
-app.get('/tools/tools', (req, res) => {
-  res.sendFile(path.join(__dirname, 'tools', 'tools.html'));
-});
-
-app.get('/checkout/cart', (req, res) => {
-  res.sendFile(path.join(__dirname, 'checkout', 'cart.html'));
-});
-
-// Catch-all for other routes - let static serving handle them
-app.get('*', (req, res, next) => {
-  // If it's an API route that wasn't handled above, return 404
-  if (req.path.startsWith('/api/')) {
-    return res.status(404).json({ error: 'API endpoint not found' });
-  }
-  
-  // For everything else, let the static file handler try
-  next();
-});
+// IMPORTANT: Don't add catch-all routes for HTML files
+// Let Vercel handle static file serving
 
 const port = process.env.PORT || 4242;
-app.listen(port, () => console.log(`Server running on port ${port}`));
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+  console.log('Stripe configured:', !!process.env.STRIPE_SECRET_KEY);
+});
