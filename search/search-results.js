@@ -18,7 +18,7 @@ function fetchSearchResults(searchTerm) {
         { name: "Daji Professional Fabric Shears", price: "$43.5", url: "../products/daji_1.html", category: "Tools" },
         { name: "Kearing Metal Edge Cutting Ruler", price: "$53.50", url: "../products/kearing_kpr6006_s.html", category: "Tools" },
         { name: "Kearing Hip Cuver Metal Ruler", price: "$56.50", url: "../products/kearing_curve_metal_ruler.html", category: "Tools" },
-        { name: "Black Bull Buckle", price: "$12.00", url: "../products/black_metal_bull_buckle.html", category: "Notions and Trims" }
+        { name: "Black Bull Buckle", price: "$12.00", url: "../products/black_metal_bull_buckle.html", category: "Notions ✚ Trims" }
     ];
 
     const filteredProducts = products.filter(product => 
