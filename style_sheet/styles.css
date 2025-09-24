@@ -213,6 +213,9 @@ nav ul li a {
     -webkit-box-pack: center;
         -ms-flex-pack: center;
             justify-content: center;
+    -webkit-box-align: stretch;
+        -ms-flex-align: stretch;
+            align-items: stretch; /* Ensure all cards are equal height */
     
 }
 
@@ -229,6 +232,13 @@ nav ul li a {
     -o-transition: transform 0.2s ease-in;
     transition: transform 0.2s ease-in;
     transition: transform 0.2s ease-in, -webkit-transform 0.2s ease-in;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
 }
 
 .product-card:hover {
@@ -239,14 +249,37 @@ nav ul li a {
 
 .product-card img {
     width: 100%;
-    height: 100%;
-    object-fit: contain;
-    display: inline-block
+    height: 220px; /* Standardize image height */
+    -o-object-fit: cover;
+       object-fit: cover; /* Fill the area consistently */
+    display: block;
 }
 
 .product-card h3 {
     font-size: 24px;
     margin: 10px 0px;
+    min-height: 48px; /* Reserve space so titles don't shift heights */
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+}
+
+.product-card h3 a {
+    color: #000000;
+    text-decoration: none;
+}
+
+.product-card h3 a:hover,
+.product-card h3 a:focus,
+.product-card h3 a:active {
+    color: #000000;
+    text-decoration: none;
 }
 
 .product-card p {
@@ -255,7 +288,11 @@ nav ul li a {
 }
 
 .product-card .btn {
-    margin-top: 10px;
+    margin-top: auto; /* Pin button to bottom for equal card heights */
+    -ms-flex-item-align: center;
+        align-self: center; /* Center horizontally within the card */
+    width: 100%;
+    max-width: 140px; /* Consistent button width */
     padding: 10px 20px;
     background: #000;
     color: #fff;

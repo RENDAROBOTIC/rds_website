@@ -47,7 +47,7 @@
                     <img src="https://res.cloudinary.com/ds4bmw1nd/image/upload/f_auto/q_auto/v1756387168/Kearing_Hip_Curve_Metal_Ruler-4.jpg" alt="Kearing Hip Curve Ruler - Side View" class="thumbnail" onclick="changeImage(this, 'https://res.cloudinary.com/ds4bmw1nd/image/upload/f_auto/q_auto/v1756387168/Kearing_Hip_Curve_Metal_Ruler-4.jpg')">
                     <img src="https://res.cloudinary.com/ds4bmw1nd/image/upload/f_auto/q_auto/Kearing_Hip_Curve_Metal_Ruler-3.jpg" alt="Kearing Hip Curve Ruler - Detail View" class="thumbnail" onclick="changeImage(this, 'https://res.cloudinary.com/ds4bmw1nd/image/upload/f_auto/q_auto/Kearing_Hip_Curve_Metal_Ruler-3.jpg')">
                     <img src="https://res.cloudinary.com/ds4bmw1nd/image/upload/f_auto/q_auto/Kearing_Hip_Curve_Metal_Ruler-5.jpg" alt="Kearing Hip Curve Ruler - Back View" class="thumbnail" onclick="changeImage(this, 'https://res.cloudinary.com/ds4bmw1nd/image/upload/f_auto/q_auto/Kearing_Hip_Curve_Metal_Ruler-5.jpg')">
-                    <img src="https://res.cloudinary.com/ds4bmw1nd/image/upload/f_auto/q_auto/v1756387164/Kearing_Hip_Curve_Plastic_Ruler-2.jpg" alt="Kearing Hip Curve Ruler - Close Up" class="thumbnail" onclick="changeImage(this, 'https://res.cloudinary.com/ds4bmw1nd/image/upload/f_auto/q_auto/v1756387164/Kearing_Hip_Curve_Plastic_Ruler-2.jpg')">
+                    <img src="https://res.cloudinary.com/ds4bmw1nd/image/upload/v1756387189/Kearing_Hip_Cuver_Plastic_Ruler-3.jpg" alt="Kearing Hip Curve Ruler - Close Up" class="thumbnail" onclick="changeImage(this, 'https://res.cloudinary.com/ds4bmw1nd/image/upload/v1756387189/Kearing_Hip_Cuver_Plastic_Ruler-3.jpg')">
                 </div>
             </div>
             <div class="product-info">
@@ -59,15 +59,15 @@
                     <div class="measurement-options">
                         <div class="measurement-option">
                             <input type="radio" id="imperial" name="measurement" value="imperial" checked onchange="updatePrice()">
-                            <label for="imperial">Imperial (inches) - $56.5</label>
+                            <label for="imperial">Imperial (inches) - $52.5</label>
                         </div>
                         <div class="measurement-option">
                             <input type="radio" id="metric" name="measurement" value="metric" onchange="updatePrice()">
-                            <label for="metric">Metric (cm) - $56.5</label>
+                            <label for="metric">Metric (cm) - $52.5</label>
                         </div>
                         <div class="measurement-option">
                             <input type="radio" id="plastic metric" name="measurement" value="plastic metric" onchange="updatePrice()">
-                            <label for="plastic metric">Plastic Metric (cm) - $16.5</label>
+                            <label for="plastic metric">Plastic Metric (cm) - $12.5</label>
                     </div>
                     
                     <label>Quantity:</label>
@@ -156,16 +156,16 @@
         
         switch(measurementType) {
             case 'imperial':
-                price = '$56.50';
+                price = '$52.50';
                 break;
             case 'metric':
-                price = '$56.50';
+                price = '$52.50';
                 break;
             case 'plastic metric':
-                price = '$16.50';
+                price = '$12.50';
                 break;
             default:
-                price = '$56.50';
+                price = '$52.50';
         }
         
         document.querySelector('.price').innerText = price;
@@ -270,19 +270,19 @@
         
         switch(measurementType) {
             case 'imperial':
-                price = 56.50;
+                price = 52.50;
                 measurementDisplay = "Imperial (inches)";
                 break;
             case 'metric':
-                price = 56.50;
+                price = 52.50;
                 measurementDisplay = "Metric (cm)";
                 break;
             case 'plastic metric':
-                price = 16.50;
+                price = 12.50;
                 measurementDisplay = "Plastic Metric (cm)";
                 break;
             default:
-                price = 56.50;
+                price = 52.50;
                 measurementDisplay = "Imperial (inches)";
         }
 

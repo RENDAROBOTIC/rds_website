@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Croc Embossed Leather - R Design Supply</title>
+    <link rel="stylesheet" href="/style_sheet/styles.css">
+    <link rel="stylesheet" href="/style_sheet/product_detail.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="/renda_design_supply.html">
+                <img src="https://res.cloudinary.com/ds4bmw1nd/image/upload/f_auto/q_auto/v1756387201/rds_logo_hbqnog.png" alt="Renda Design Supply">
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/tools/tools.html">Tools</a></li>
+                <li><a href="/n&t/n&t.html">Notions ✚ Trims</a></li>
+                <li><a href="/f&l/f&l.html">Fabric ✚ Leather</a></li>
+                <li><a href="/support/support.html">Support</a></li>
+            </ul>
+        </nav>
+        <div class="search-cart">
+            <form id="searchForm" action="../search/search-results.html" method="get">
+                <input type="text" id="searchInput" name="q" placeholder="">
+                <button type="submit"></button>
+            </form>
+            <div class="cart-link">
+                <a href="/checkout/cart.html">
+                    <img src="https://res.cloudinary.com/ds4bmw1nd/image/upload/f_auto/q_auto/cart.png" alt="Cart">
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="product-detail">
+            <div class="product-gallery">
+                <div class="main-image">
+                    <img src="https://res.cloudinary.com/ds4bmw1nd/image/upload/v1757795952/leather1_yfyn09.jpg" alt="Croc Embossed Leather" id="mainImage">
+                </div>
+                <div class="thumbnail-container">
+                    <img src="https://res.cloudinary.com/ds4bmw1nd/image/upload/v1757795952/leather1_yfyn09.jpg" alt="Croc Embossed Leather - View 1" class="thumbnail active" onclick="changeImage(this, 'https://res.cloudinary.com/ds4bmw1nd/image/upload/v1757795952/leather1_yfyn09.jpg')">
+                </div>
+            </div>
+            <div class="product-info">
+                <h1>Croc Embossed Leather</h1>
+                <p class="price">$350</p>
+                
+                <div class="product-options">
+                    <label>Cut:</label>
+                    <div class="size-options">
+                        <div class="size-option">
+                            <input type="radio" id="size-full" name="size" value="Full Hide" checked onchange="updatePrice()">
+                            <label for="size-full">Full Hide - $350.00</label>
+                        </div>
+                        <div class="size-option">
+                            <input type="radio" id="size-half" name="size" value="Half Hide" onchange="updatePrice()">
+                            <label for="size-half">Half Hide - $215.00</label>
+                        </div>
+                    </div>
+                    
+                    
+                    
+                    <label>Quantity:</label>
+                    <div class="quantity-selector">
+                        <button onclick="decrementQuantity(event)">-</button>
+                        <input type="number" id="quantity" value="1" min="1" max="50">
+                        <button onclick="incrementQuantity(event)">+</button>
+                    </div>
+                    
+                    <button class="btn" onclick="addToCart()">Add to Cart</button>
+                </div>
+            </div>
+            
+            <div class="product-description">
+                <h2>Product Description</h2>
+                <p>Croc Embossed Leather is a premium-grade, textured leather ideal for luxury goods, leathercraft, upholstery, and accessories. It features a distinctive crocodile pattern with a consistent finish that cuts and stitches beautifully.</p>
+                
+                
+                
+                <h3>Specifications:</h3>
+                <ul>
+                    <li>Grade: Top Grain</li>
+                    <li>Thickness: 1.2–1.6 mm (approx.)</li>
+                    <li>Finish: Semi-aniline</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>RDS. &copy; 2025</p> 
+        </div>
+    </footer>
+
+    <script>
+    function changeImage(thumbnail, newSrc) {
+        document.getElementById('mainImage').src = newSrc;
+        let thumbnails = document.querySelectorAll('.thumbnail');
+        thumbnails.forEach(thumb => thumb.classList.remove('active'));
+        thumbnail.classList.add('active');
+    }
+
+    function getMaxForSize(size) {
+        switch(size) {
+            case 'Full Hide': return 1;
+            case 'Half Hide': return 2;
+            default: return 1;
+        }
+    }
+
+    function updatePrice() {
+        const sizeOptions = document.getElementsByName('size');
+        let selected;
+        for (let i = 0; i < sizeOptions.length; i++) {
+            if (sizeOptions[i].checked) { selected = sizeOptions[i].value; break; }
+        }
+        let price = '$350.00';
+        switch(selected) {
+            case 'Full Hide': price = '$350.00'; break;
+            case 'Half Hide': price = '$215.00'; break;
+        }
+        document.querySelector('.price').innerText = price;
+
+        // Enforce size-based quantity limits
+        const quantityInput = document.getElementById('quantity');
+        const maxAllowed = getMaxForSize(selected);
+        quantityInput.max = String(maxAllowed);
+        if (parseInt(quantityInput.value) > maxAllowed) {
+            quantityInput.value = String(maxAllowed);
+        }
+        if (parseInt(quantityInput.value) < 1 || isNaN(parseInt(quantityInput.value))) {
+            quantityInput.value = '1';
+        }
+    }
+
+    function incrementQuantity(event) {
+        if (event) event.preventDefault();
+        const quantityInput = document.getElementById('quantity');
+        const sizeOptions = document.getElementsByName('size');
+        let selected = 'Full Hide';
+        for (let i = 0; i < sizeOptions.length; i++) {
+            if (sizeOptions[i].checked) { selected = sizeOptions[i].value; break; }
+        }
+        const maxAllowed = getMaxForSize(selected);
+        const current = parseInt(quantityInput.value) || 1;
+        if (current < maxAllowed) quantityInput.value = String(current + 1);
+    }
+
+    function decrementQuantity(event) {
+        if (event) event.preventDefault();
+        const quantityInput = document.getElementById('quantity');
+        const current = parseInt(quantityInput.value) || 1;
+        if (current > 1) quantityInput.value = String(current - 1);
+    }
+
+    function isLocalStorageAvailable() {
+        try {
+            const test = '__rds_test__';
+            localStorage.setItem(test, test);
+            localStorage.removeItem(test);
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    function showAddToCartFeedback(name, size, color, quantity, price) {
+        const feedback = document.createElement('div');
+        feedback.className = 'add-to-cart-feedback';
+        feedback.innerHTML = `<div class="feedback-content">✓ Added ${quantity} ${name} (${size}, ${color}) - $${(price*quantity).toFixed(2)}</div>`;
+        document.body.appendChild(feedback);
+        setTimeout(() => {
+            feedback.style.opacity = '0';
+            setTimeout(() => document.body.contains(feedback) && document.body.removeChild(feedback), 500);
+        }, 2000);
+    }
+
+    function addToCart() {
+        if (!isLocalStorageAvailable()) {
+            alert('Cart is unavailable in this browser mode. Please try a different browser or disable private mode.');
+            return;
+        }
+        const sizeOptions = document.getElementsByName('size');
+        let size = 'Full Hide';
+        for (let i = 0; i < sizeOptions.length; i++) {
+            if (sizeOptions[i].checked) { size = sizeOptions[i].value; break; }
+        }
+        let color = 'Shown';
+
+        let price = 350.00;
+        switch(size) {
+            case 'Full Hide': price = 350.00; break;
+            case 'Half Hide': price = 215.00; break;
+        }
+
+        const quantityInput = document.getElementById('quantity');
+        const quantity = parseInt(quantityInput.value) || 1;
+        const maxAllowed = getMaxForSize(size);
+        if (quantity > maxAllowed) {
+            alert(`${size} is limited to ${maxAllowed} piece${maxAllowed > 1 ? 's' : ''}.`);
+            quantityInput.value = String(maxAllowed);
+            return;
+        }
+        if (quantity < 1) {
+            alert('Minimum quantity is 1.');
+            quantityInput.value = '1';
+            return;
+        }
+        const newItem = {
+            id: Date.now() + Math.random(),
+            name: 'Croc Embossed Leather',
+            size: size,
+            sizeDisplay: size,
+            color: color,
+            price: price,
+            quantity: quantity,
+            total: price * quantity
+        };
+
+        try {
+            let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+            const existingItemIndex = cartItems.findIndex(item => 
+                item.name === newItem.name && item.size === newItem.size && item.color === newItem.color
+            );
+            if (existingItemIndex !== -1) {
+                cartItems[existingItemIndex].quantity += quantity;
+                cartItems[existingItemIndex].total = cartItems[existingItemIndex].price * cartItems[existingItemIndex].quantity;
+            } else {
+                cartItems.push(newItem);
+            }
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            showAddToCartFeedback(newItem.name, newItem.sizeDisplay, newItem.color, newItem.quantity, newItem.price);
+        } catch (error) {
+            console.error('Error adding to cart:', error);
+            alert('There was a problem adding the item to your cart. Please try again.');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        updatePrice();
+    });
+    </script>
+</body>
+</html>
+
+

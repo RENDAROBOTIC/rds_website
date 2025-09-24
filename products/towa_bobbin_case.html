@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Towa Bobbin Case - R Design Supply</title>
+    <link rel="stylesheet" href="/style_sheet/styles.css">
+    <link rel="stylesheet" href="/style_sheet/product_detail.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="/renda_design_supply.html">
+                <img src="https://res.cloudinary.com/ds4bmw1nd/image/upload/f_auto/q_auto/v1756387201/rds_logo_hbqnog.png" alt="Renda Design Supply">
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/tools/tools.html">Tools</a></li>
+                <li><a href="/n&t/n&t.html">Notions ✚ Trims</a></li>
+                <li><a href="/f&l/f&l.html">Fabric ✚ Leather</a></li>
+                <li><a href="/support/support.html">Support</a></li>
+            </ul>
+        </nav>
+        <div class="search-cart">
+            <form id="searchForm" action="../search/search-results.html" method="get">
+                <input type="text" id="searchInput" name="q" placeholder="">
+                <button type="submit"></button>
+            </form>
+            <div class="cart-link">
+                <a href="/checkout/cart.html">
+                    <img src="https://res.cloudinary.com/ds4bmw1nd/image/upload/f_auto/q_auto/cart.png" alt="Cart">
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="product-detail">
+            <div class="product-gallery">
+                <div class="main-image">
+                    <img src="https://res.cloudinary.com/ds4bmw1nd/image/upload/v1757800112/towa_bobbin_case-4_ghrzvq.png" alt="Towa Bobbin Case" id="mainImage">
+                </div>
+                <div class="thumbnail-container">
+                    <img src="https://res.cloudinary.com/ds4bmw1nd/image/upload/v1757800112/towa_bobbin_case-4_ghrzvq.png" alt="Towa Bobbin Case" class="thumbnail active" onclick="changeImage(this, 'https://res.cloudinary.com/ds4bmw1nd/image/upload/v1757800112/towa_bobbin_case-4_ghrzvq.png')">
+                    <img src="https://res.cloudinary.com/ds4bmw1nd/image/upload/v1757798076/towa_bobbin_case-2_wqazna.jpg" alt="Towa Bobbin Case - Angle View" class="thumbnail" onclick="changeImage(this, 'https://res.cloudinary.com/ds4bmw1nd/image/upload/v1757798076/towa_bobbin_case-2_wqazna.jpg')">
+                    <img src="https://res.cloudinary.com/ds4bmw1nd/image/upload/v1757798075/towa_bobbin_case_shxv7n.jpg" alt="Towa Bobbin Case - Detail" class="thumbnail" onclick="changeImage(this, 'https://res.cloudinary.com/ds4bmw1nd/image/upload/v1757798075/towa_bobbin_case_shxv7n.jpg')">
+                </div>
+            </div>
+            <div class="product-info">
+                <h1>Towa Bobbin Case</h1>
+                <p class="price">$20.00</p>
+
+                <div class="product-options">
+                    <label>Quantity:</label>
+                    <div class="quantity-selector">
+                        <button onclick="decrementQuantity(event)">-</button>
+                        <input type="number" id="quantity" value="1" min="1" max="50">
+                        <button onclick="incrementQuantity(event)">+</button>
+                    </div>
+
+                    <button class="btn" onclick="addToCart()">Add to Cart</button>
+                </div>
+            </div>
+
+            <div class="product-description">
+                <h2>Product Description</h2>
+                <p>Genuine Towa bobbin case suitable for high-quality stitching performance and consistent thread tension.</p>
+                <h3>Specifications:</h3>
+                <ul>
+                    <li>Brand: Towa</li>
+                    <li>Compatibility: Standard industrial bobbin systems (see machine specs)</li>
+                    <li>Finish: Precision machined</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>RDS. &copy; 2025</p> 
+        </div>
+    </footer>
+
+    <script>
+    function changeImage(thumbnail, newSrc) {
+        document.getElementById('mainImage').src = newSrc;
+        let thumbnails = document.querySelectorAll('.thumbnail');
+        thumbnails.forEach(thumb => thumb.classList.remove('active'));
+        thumbnail.classList.add('active');
+    }
+
+    function incrementQuantity(event) {
+        if (event) event.preventDefault();
+        const input = document.getElementById('quantity');
+        const current = parseInt(input.value) || 1;
+        if (current < 100) input.value = String(current + 1);
+    }
+
+    function decrementQuantity(event) {
+        if (event) event.preventDefault();
+        const input = document.getElementById('quantity');
+        const current = parseInt(input.value) || 1;
+        if (current > 1) input.value = String(current - 1);
+    }
+
+    function isLocalStorageAvailable() {
+        try { const t='__rds__'; localStorage.setItem(t,t); localStorage.removeItem(t); return true; } catch(e){ return false; }
+    }
+
+    function showAddToCartFeedback(name, quantity, price) {
+        const el = document.createElement('div');
+        el.className = 'add-to-cart-feedback';
+        el.innerHTML = `✓ Added ${quantity} ${name} - $${(price*quantity).toFixed(2)}`;
+        document.body.appendChild(el);
+        setTimeout(()=>{ el.style.opacity='0'; setTimeout(()=>document.body.contains(el)&&document.body.removeChild(el), 500); }, 2000);
+    }
+
+    function addToCart() {
+        if (!isLocalStorageAvailable()) { alert('Cart unavailable in this browser mode.'); return; }
+        const quantity = parseInt(document.getElementById('quantity').value) || 1;
+        const price = 20.00;
+        const newItem = {
+            id: Date.now() + Math.random(),
+            name: 'Towa Bobbin Case',
+            price: price,
+            quantity: quantity,
+            total: price * quantity
+        };
+        try {
+            let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+            const idx = cartItems.findIndex(i => i.name === newItem.name);
+            if (idx !== -1) {
+                cartItems[idx].quantity += quantity;
+                cartItems[idx].total = cartItems[idx].price * cartItems[idx].quantity;
+            } else {
+                cartItems.push(newItem);
+            }
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            showAddToCartFeedback(newItem.name, newItem.quantity, newItem.price);
+        } catch (e) {
+            console.error(e);
+            alert('There was a problem adding the item to your cart.');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function(){ /* ready */ });
+    </script>
+</body>
+</html>
+
+
