@@ -355,7 +355,8 @@ nav ul li a {
 .all-products .image-container img {
     width: 100%; /* Ensure the image fills the container */
     max-width: 300px;
-    height: auto;
+    height: 220px; /* Standardize image height */
+    object-fit: cover; /* Fill the area consistently */
     display: block; /* Ensures no extra space below the image */
 }
 

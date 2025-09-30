@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KAI 7280 Pro Fabric Scissor - R Design Supply</title>
+    <link rel="stylesheet" href="/style_sheet/styles.css">
+    <link rel="stylesheet" href="/style_sheet/product_detail.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="/renda_design_supply.html">
+                <img src="https://res.cloudinary.com/ds4bmw1nd/image/upload/f_auto/q_auto/v1756387201/rds_logo_hbqnog.png" alt="Renda Design Supply">
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/tools/tools.html">Tools</a></li>
+                <li><a href="/n&t/n&t.html">Notions ✚ Trims</a></li>
+                <li><a href="/f&l/f&l.html">Fabric ✚ Leather</a></li>
+                <li><a href="/support/support.html">Support</a></li>
+            </ul>
+        </nav>
+        <div class="search-cart">
+            <form id="searchForm" action="../search/search-results.html" method="get">
+                <input type="text" id="searchInput" name="q" placeholder="">
+                <button type="submit"></button>
+            </form>
+            <div class="cart-link">
+                <a href="/checkout/cart.html">
+                    <img src="https://res.cloudinary.com/ds4bmw1nd/image/upload/f_auto/q_auto/cart.png" alt="Cart">
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="product-detail">
+            <div class="product-gallery">
+                <div class="main-image">
+                    <img src="https://res.cloudinary.com/ds4bmw1nd/image/upload/v1758931374/KAI_7280_blacmu.jpg" alt="KAI 7280 Pro Fabric Scissor" id="mainImage">
+                </div>
+                <div class="thumbnail-container">
+                    <img src="https://res.cloudinary.com/ds4bmw1nd/image/upload/v1758931374/KAI_7280_blacmu.jpg" alt="KAI 7280 Pro - Main View" class="thumbnail active" onclick="changeImage(this, 'https://res.cloudinary.com/ds4bmw1nd/image/upload/v1758931374/KAI_7280_blacmu.jpg')">
+                    <img src="https://res.cloudinary.com/ds4bmw1nd/image/upload/v1758931364/KAI_7280-3_c2mdry.jpg" alt="KAI 7280 Pro - Detail View" class="thumbnail" onclick="changeImage(this, 'https://res.cloudinary.com/ds4bmw1nd/image/upload/v1758931364/KAI_7280-3_c2mdry.jpg')">
+                    <img src="https://res.cloudinary.com/ds4bmw1nd/image/upload/v1758931350/KAI_7280-2_bhuedn.jpg" alt="KAI 7280 Pro - Side View" class="thumbnail" onclick="changeImage(this, 'https://res.cloudinary.com/ds4bmw1nd/image/upload/v1758931350/KAI_7280-2_bhuedn.jpg')">
+                </div>
+            </div>
+            <div class="product-info">
+                <h1>KAI 7280 Pro Fabric Scissor (Japan Version)</h1>
+                <p class="price">$168.50</p>
+                
+                <div class="product-options">
+                    <label>Size:</label>
+                    <div class="size-options">
+                        <div class="size-option">
+                            <input type="radio" id="size-11" name="size" value="11" checked onchange="updatePrice()">
+                            <label for="size-11">11 inch - $168.50</label>
+                        </div>
+                    </div>
+                    
+                    <label>Color:</label>
+                    <div class="color-options">
+                        <div class="color-options">
+                            <div class="color-option black selected" onclick="selectColor(this, 'Black')"></div>
+                        </div>
+                    </div>
+                    
+                    <label>Quantity:</label>
+                    <div class="quantity-selector">
+                        <button onclick="decrementQuantity()">-</button>
+                        <input type="number" id="quantity" value="1" min="1" max="10">
+                        <button onclick="incrementQuantity()">+</button>
+                    </div>
+                    
+                    <button class="btn" onclick="addToCart()">Add to Cart</button>
+                </div>
+            </div>
+            
+            <div class="product-description">
+                <h2>Product Description</h2>
+                <p>The KAI 7280 Pro Fabric Scissor represents the pinnacle of Japanese craftsmanship in fabric cutting tools. RDS. carries the Japanese version, which we believe is better designed for professional seamstresses, tailors, and fashion designers who demand ultra fine products and higher reliability.</p>
+                
+                <p>These premium scissors feature high-carbon stainless steel blades that maintain their razor-sharp edge through countless projects. The ergonomic design reduces hand fatigue during extended cutting sessions, while the precision-ground blades ensure clean, accurate cuts every time.</p>
+                
+                <div class="product-features">
+                    <h3>Features:</h3>
+                    <ul>
+                        <li>High-carbon stainless steel blades for superior sharpness</li>
+                        <li>Ergonomic handle design for comfortable extended use</li>
+                        <li>Precision-ground blades for clean, accurate cuts</li>
+                        <li>Professional-grade construction for durability</li>
+                        <li>Perfect balance for optimal cutting control</li>
+                    </ul>
+                </div>
+                
+                <h3>Technical Specifications:</h3>
+                <ul>
+                    <li>Available size: 11 inch</li>
+                    <li>Blade material: High-carbon stainless steel</li>
+                    <li>Handle material: Ergonomic plastic with metal reinforcement</li>
+                    <li>Weight: Optimally balanced for professional use</li>
+                    <li>Country of origin: Japan</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>RDS. &copy; 2025</p> 
+        </div>
+    </footer>
+    
+    <script>
+    // Check if localStorage is available
+    function isLocalStorageAvailable() {
+        try {
+            const test = 'test';
+            localStorage.setItem(test, test);
+            localStorage.removeItem(test);
+            return true;
+        } catch(e) {
+            return false;
+        }
+    }
+
+    // Debug logging function
+    function debugLog(message) {
+        console.log(`[DEBUG] ${message}`);
+    }
+
+    function changeImage(thumbnail, newSrc) {
+        // Update main image
+        document.getElementById('mainImage').src = newSrc;
+        
+        // Update active thumbnail
+        let thumbnails = document.querySelectorAll('.thumbnail');
+        thumbnails.forEach(thumb => {
+            thumb.classList.remove('active');
+        });
+        thumbnail.classList.add('active');
+        debugLog(`Image changed to: ${newSrc}`);
+    }
+
+    function selectColor(element, colorName) {
+        // Update selected color styling
+        let colorOptions = document.querySelectorAll('.color-option');
+        colorOptions.forEach(option => {
+            option.classList.remove('selected');
+        });
+        element.classList.add('selected');
+        
+        console.log(`Selected color: ${colorName}`);
+    }
+    
+    function updatePrice() {
+        const sizeOptions = document.getElementsByName('size');
+        let price;
+        let size;
+        
+        for (let i = 0; i < sizeOptions.length; i++) {
+            if (sizeOptions[i].checked) {
+                size = sizeOptions[i].value;
+                break;
+            }
+        }
+        
+        switch(size) {
+            case '11':
+                price = '$168.50';
+                break;
+            default:
+                price = '$168.50';
+        }
+        
+        document.querySelector('.price').innerText = price;
+        debugLog(`Price updated to: ${price} for ${size} inch size`);
+    }
+    
+    function incrementQuantity() {
+        event.preventDefault();
+        const quantityInput = document.getElementById('quantity');
+        if (quantityInput.value < 10) {
+            quantityInput.value = parseInt(quantityInput.value) + 1;
+            debugLog(`Quantity incremented to: ${quantityInput.value}`);
+        }
+    }
+    
+    function decrementQuantity() {
+        event.preventDefault();
+        const quantityInput = document.getElementById('quantity');
+        if (quantityInput.value > 1) {
+            quantityInput.value = parseInt(quantityInput.value) - 1;
+            debugLog(`Quantity decremented to: ${quantityInput.value}`);
+        }
+    }
+
+    function showAddToCartFeedback(quantity, size, color, price) {
+        // Create a feedback element
+        const feedback = document.createElement('div');
+        feedback.className = 'add-to-cart-feedback';
+        
+        // Determine size display text
+        let sizeDisplay = "11 inch";
+        
+        feedback.innerHTML = `
+            <div class="feedback-content">
+                <p>✓ Added to cart: ${quantity} KAI 7280 Pro Fabric Scissor</p>
+                <p>Size: ${sizeDisplay}, Color: ${color}, Price: $${price.toFixed(2)}</p>
+            </div>
+        `;
+        
+        // Add styles
+        feedback.style.position = 'fixed';
+        feedback.style.top = '20%';
+        feedback.style.right = '20%';
+        feedback.style.backgroundColor = '#4CAF50';
+        feedback.style.color = 'white';
+        feedback.style.padding = '15px';
+        feedback.style.borderRadius = '5px';
+        feedback.style.zIndex = '1000';
+        feedback.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+        feedback.style.transition = 'opacity 0.5s ease-in-out';
+        
+        document.body.appendChild(feedback);
+        
+        // Show then fade out
+        setTimeout(() => {
+            feedback.style.opacity = '0';
+            setTimeout(() => {
+                if (document.body.contains(feedback)) {
+                    document.body.removeChild(feedback);
+                }
+            }, 500);
+        }, 3000);
+
+        debugLog('Cart feedback displayed');
+    }
+    
+    function addToCart() {
+        if (!isLocalStorageAvailable()) {
+            alert("Unable to access local storage. Please check your browser settings or try a different browser.");
+            return;
+        }
+
+        debugLog('Add to cart button clicked');
+        
+        // Get size and color
+        const sizeOptions = document.getElementsByName('size');
+        const colorElement = document.querySelector('.color-option.selected');
+        let size;
+        let color = 'Black'; // Default
+
+        if (colorElement) {
+            if (colorElement.classList.contains('black')) {
+                color = 'Black';
+            }
+        }
+        
+        for (let i = 0; i < sizeOptions.length; i++) {
+            if (sizeOptions[i].checked) {
+                size = sizeOptions[i].value;
+                break;
+            }
+        }
+        
+        const quantity = parseInt(document.getElementById('quantity').value);
+
+        if (quantity < 1 || quantity > 10) {
+            alert('Please enter a quantity between 1 and 10.');
+            return;
+        }
+
+        let price; 
+        let sizeDisplay;
+        
+        switch(size) {
+            case '11':
+                price = 168.50;
+                sizeDisplay = "11 inch";
+                break;
+            default:
+                price = 168.50;
+                sizeDisplay = "11 inch";
+        }
+
+        // Create standardized cart item object
+        const newItem = {
+            id: Date.now() + Math.random(), // Unique ID
+            name: 'KAI 7280 Pro Fabric Scissor',
+            size: size,
+            sizeDisplay: sizeDisplay,
+            color: color,
+            price: price,
+            quantity: quantity,
+            total: price * quantity
+        };
+
+        debugLog(`Cart item created: ${JSON.stringify(newItem)}`);
+
+        try {
+            // Retrieve existing cart items from localStorage
+            let cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+            debugLog(`Retrieved ${cartItems.length} existing items from localStorage`);
+
+            // Check if identical item already exists (same product, size and color)
+            const existingItemIndex = cartItems.findIndex(item => 
+                item.name === newItem.name && 
+                item.size === newItem.size &&
+                item.color === newItem.color
+            );
+            
+            if (existingItemIndex !== -1) {
+                // Update existing item quantity instead of adding new one
+                cartItems[existingItemIndex].quantity += quantity;
+                cartItems[existingItemIndex].total = cartItems[existingItemIndex].price * cartItems[existingItemIndex].quantity;
+                debugLog(`Updated existing item quantity to ${cartItems[existingItemIndex].quantity}`);
+            } else {
+                // Add new item
+                cartItems.push(newItem);
+                debugLog('Added new item to cart');
+            }
+
+            // Save updated cart items back to localStorage
+            localStorage.setItem('cartItems', JSON.stringify(cartItems));
+            debugLog(`Saved ${cartItems.length} items to localStorage`);
+            
+            // Display success message
+            showAddToCartFeedback(quantity, size, color, price);
+            
+        } catch (error) {
+            console.error('Error adding to cart:', error);
+            alert("There was a problem adding the item to your cart. Please try again.");
+        }
+    }
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+        // Verify localStorage works on page load
+        if (!isLocalStorageAvailable()) {
+            console.error("localStorage is not available. Cart functionality will be limited.");
+        } else {
+            debugLog('localStorage is available. Cart functionality should work.');
+        }
+        
+        // Set initial price
+        updatePrice();
+    });
+</script>
+</body>
+</html>

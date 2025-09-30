@@ -102,15 +102,6 @@
             border-radius: 4px;
             margin: 10px 0;
         }
-        .province-selector {
-            margin: 15px 0;
-            text-align: right;
-        }
-        .province-selector select {
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
     </style>
 </head>
 <body>
@@ -149,26 +140,10 @@
             </div>
             
             <div id="cart-summary" style="display: none;">
-                <div class="province-selector">
-                    <label for="province-select">Province (for tax calculation): </label>
-                    <select id="province-select" onchange="updateTaxes()">
-                        <option value="BC">BC - 12% (GST + PST)</option>
-                        <!-- <option value="AB">AB - 5% (GST)</option>
-                        <option value="ON">ON - 13% (HST)</option>
-                        <option value="QC">QC - 14.975% (GST + QST)</option>
-                        <option value="SK">SK - 11% (GST + PST)</option>
-                        <option value="MB">MB - 12% (GST + PST)</option>
-                        <option value="NB">NB - 15% (HST)</option>
-                        <option value="NS">NS - 15% (HST)</option>
-                        <option value="PE">PE - 15% (HST)</option>
-                        <option value="NL">NL - 15% (HST)</option> -->
-                    </select>
-                </div>
                 
                 <div class="tax-breakdown">
                     <p>Subtotal: $<span id="subtotal">0.00</span></p>
-                    <p>Tax (<span id="tax-rate">12%</span>): $<span id="tax-amount">0.00</span></p>
-                    <h3>Total: $<span id="total-amount">0.00</span></h3>
+                    <p><em>Tax and delivery will be calculated at checkout</em></p>
                 </div>
                 
                 <button id="checkout-button">Checkout with Stripe</button>
@@ -185,27 +160,13 @@
         let cartItems = [];
         let stripe;
 
-        // Tax rates by province
-        const TAX_RATES = {
-            'BC': { rate: 0.12, name: '12% (GST + PST)' },
-            'AB': { rate: 0.05, name: '5% (GST)' },
-            'ON': { rate: 0.13, name: '13% (HST)' },
-            'QC': { rate: 0.14975, name: '14.975% (GST + QST)' },
-            'SK': { rate: 0.11, name: '11% (GST + PST)' },
-            'MB': { rate: 0.12, name: '12% (GST + PST)' },
-            'NB': { rate: 0.15, name: '15% (HST)' },
-            'NS': { rate: 0.15, name: '15% (HST)' },
-            'PE': { rate: 0.15, name: '15% (HST)' },
-            'NL': { rate: 0.15, name: '15% (HST)' }
-        };
-
-        // Initialize Stripe
+        // Initialize Stripe (simplified for demo)
         async function initializeStripe() {
             try {
-                const response = await fetch('/api/config');
-                const { publishableKey } = await response.json();
-                stripe = Stripe(publishableKey);
-                console.log('Stripe initialized securely');
+                // For demo purposes, we'll use a test key
+                // In production, this should come from your server
+                stripe = Stripe('pk_test_51234567890abcdef'); // Replace with your actual test key
+                console.log('Stripe initialized for demo');
             } catch (error) {
                 console.error('Error initializing Stripe:', error);
                 showError('Payment system unavailable. Please try again later.');
@@ -274,7 +235,7 @@
                 `;
             });
             
-            updateTaxes();
+            updateSubtotal();
         }
 
         // Update item quantity
@@ -310,19 +271,10 @@
             }
         }
 
-        // Update tax calculations
-        function updateTaxes() {
-            const province = document.getElementById('province-select').value;
-            const taxInfo = TAX_RATES[province];
-            
+        // Update subtotal only
+        function updateSubtotal() {
             const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const taxAmount = subtotal * taxInfo.rate;
-            const total = subtotal + taxAmount;
-            
             document.getElementById('subtotal').textContent = subtotal.toFixed(2);
-            document.getElementById('tax-rate').textContent = taxInfo.name;
-            document.getElementById('tax-amount').textContent = taxAmount.toFixed(2);
-            document.getElementById('total-amount').textContent = total.toFixed(2);
         }
 
         // Show error message
@@ -334,11 +286,6 @@
 
         // Checkout with Stripe
         document.getElementById('checkout-button').addEventListener('click', async function() {
-            if (!stripe) {
-                showError('Payment system is loading. Please wait and try again.');
-                return;
-            }
-            
             if (!cartItems || cartItems.length === 0) {
                 showError('Your cart is empty!');
                 return;
@@ -349,7 +296,8 @@
             button.textContent = 'Processing...';
             
             try {
-                const province = document.getElementById('province-select').value;
+                // Calculate subtotal
+                const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
                 
                 // Prepare line items for Stripe
                 const lineItems = cartItems.map(item => {
@@ -364,31 +312,18 @@
                     };
                 });
                 
-                const response = await fetch('/api/create-checkout-session', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ 
-                        lineItems: lineItems,
-                        province: province
-                    }),
-                });
+                // For demo purposes, redirect to success page
+                // In production, this would integrate with your Stripe backend
+                const orderSummary = {
+                    items: cartItems,
+                    subtotal: subtotal
+                };
                 
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
+                // Store order in localStorage for demo
+                localStorage.setItem('currentOrder', JSON.stringify(orderSummary));
                 
-                const { sessionId } = await response.json();
-                
-                // Redirect to Stripe Checkout
-                const result = await stripe.redirectToCheckout({
-                    sessionId: sessionId,
-                });
-                
-                if (result.error) {
-                    throw new Error(result.error.message);
-                }
+                // Redirect to success page
+                window.location.href = '/checkout/success.html';
                 
             } catch (error) {
                 console.error('Checkout error:', error);

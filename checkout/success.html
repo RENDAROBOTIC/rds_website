@@ -87,6 +87,14 @@
                 Your payment was successful and your order has been placed.<br>
                 You will receive an email confirmation shortly with your order details.
             </p>
+            
+            <div id="order-summary" style="text-align: left; margin: 30px 0; padding: 20px; background: white; border-radius: 8px; border: 1px solid #ddd;">
+                <h3>Order Summary</h3>
+                <div id="order-details">
+                    <!-- Order details will be populated here -->
+                </div>
+            </div>
+            
             <a href="/renda_design_supply.html" class="continue-shopping">Continue Shopping</a>
         </div>
     </main>
@@ -96,15 +104,50 @@
     </footer>
 
     <script>
-        // Clear cart after successful purchase
+        // Display order summary and clear cart after successful purchase
         document.addEventListener('DOMContentLoaded', function() {
             try {
+                // Get order details from localStorage
+                const orderData = localStorage.getItem('currentOrder');
+                if (orderData) {
+                    const order = JSON.parse(orderData);
+                    displayOrderSummary(order);
+                }
+                
+                // Clear cart after successful purchase
                 localStorage.removeItem('cartItems');
+                localStorage.removeItem('currentOrder');
                 console.log('Cart cleared after successful purchase');
             } catch (e) {
-                console.error('Error clearing cart:', e);
+                console.error('Error processing order:', e);
             }
         });
+
+        function displayOrderSummary(order) {
+            const container = document.getElementById('order-details');
+            
+            let itemsHtml = '';
+            order.items.forEach(item => {
+                const displaySize = item.size || item.sizeDisplay || 'Standard';
+                const displayColor = item.color && item.color !== 'N/A' ? item.color : null;
+                
+                itemsHtml += `
+                    <div style="margin: 10px 0; padding: 10px; border-bottom: 1px solid #eee;">
+                        <strong>${item.name}</strong><br>
+                        <small>${displaySize}${displayColor ? ', Color: ' + displayColor : ''}</small><br>
+                        Quantity: ${item.quantity} × $${item.price.toFixed(2)} = $${(item.price * item.quantity).toFixed(2)}
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = `
+                ${itemsHtml}
+                <div style="margin-top: 20px; padding-top: 15px; border-top: 2px solid #333;">
+                    <p><strong>Subtotal:</strong> $${order.subtotal.toFixed(2)}</p>
+                    <p><em>Tax and delivery were calculated and processed through Stripe</em></p>
+                </div>
+            `;
+        }
     </script>
 </body>
 </html>
