@@ -83,7 +83,7 @@ app.post("/api/create-checkout-session", async (req, res) => {
       line_items: stripeLineItems,
       mode: 'payment',
       success_url: `${domain}/checkout/success.html?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${domain}/checkout/cart.html`,
+      cancel_url: `${domain}/checkout/cancelled.html`,
       shipping_address_collection: {
         allowed_countries: ['CA'],
       },

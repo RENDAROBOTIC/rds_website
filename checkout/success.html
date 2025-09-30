@@ -104,20 +104,49 @@
     </footer>
 
     <script>
-        // Display order summary and clear cart after successful purchase
-        document.addEventListener('DOMContentLoaded', function() {
+        // Display order summary and clear cart after successful Stripe payment
+        document.addEventListener('DOMContentLoaded', async function() {
             try {
-                // Get order details from localStorage
-                const orderData = localStorage.getItem('currentOrder');
-                if (orderData) {
-                    const order = JSON.parse(orderData);
-                    displayOrderSummary(order);
-                }
+                // Get session_id from URL parameter
+                const urlParams = new URLSearchParams(window.location.search);
+                const sessionId = urlParams.get('session_id');
                 
-                // Clear cart after successful purchase
-                localStorage.removeItem('cartItems');
-                localStorage.removeItem('currentOrder');
-                console.log('Cart cleared after successful purchase');
+                if (sessionId) {
+                    console.log('Payment successful with session:', sessionId);
+                    
+                    // Get order details from localStorage
+                    const cartData = localStorage.getItem('cartItems');
+                    if (cartData) {
+                        const items = JSON.parse(cartData);
+                        const subtotal = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                        
+                        displayOrderSummary({
+                            items: items,
+                            subtotal: subtotal,
+                            sessionId: sessionId
+                        });
+                    }
+                    
+                    // Clear cart after successful purchase
+                    localStorage.removeItem('cartItems');
+                    localStorage.removeItem('currentOrder');
+                    console.log('Cart cleared after successful Stripe payment');
+                } else {
+                    // Fallback for demo orders without Stripe session
+                    const orderData = localStorage.getItem('currentOrder');
+                    if (orderData) {
+                        const order = JSON.parse(orderData);
+                        displayOrderSummary(order);
+                        localStorage.removeItem('cartItems');
+                        localStorage.removeItem('currentOrder');
+                    } else {
+                        // No order found, redirect to home
+                        console.log('No order found, redirecting...');
+                        setTimeout(() => {
+                            window.location.href = '/renda_design_supply.html';
+                        }, 2000);
+                    }
+                }
             } catch (e) {
                 console.error('Error processing order:', e);
             }
@@ -140,13 +169,20 @@
                 `;
             });
             
-            container.innerHTML = `
+            let summaryHtml = `
                 ${itemsHtml}
                 <div style="margin-top: 20px; padding-top: 15px; border-top: 2px solid #333;">
                     <p><strong>Subtotal:</strong> $${order.subtotal.toFixed(2)}</p>
                     <p><em>Tax and delivery were calculated and processed through Stripe</em></p>
-                </div>
             `;
+            
+            if (order.sessionId) {
+                summaryHtml += `<p style="font-size: 12px; color: #999; margin-top: 10px;">Order ID: ${order.sessionId}</p>`;
+            }
+            
+            summaryHtml += `</div>`;
+            
+            container.innerHTML = summaryHtml;
         }
     </script>
 </body>

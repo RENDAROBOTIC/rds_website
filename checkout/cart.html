@@ -160,15 +160,16 @@
         let cartItems = [];
         let stripe;
 
-        // Initialize Stripe (simplified for demo)
+        // Initialize Stripe
         async function initializeStripe() {
             try {
-                // For demo purposes, we'll use a test key
-                // In production, this should come from your server
-                stripe = Stripe('pk_test_51234567890abcdef'); // Replace with your actual test key
-                console.log('Stripe initialized for demo');
+                // Fetch Stripe publishable key from server
+                const response = await fetch('/api/config');
+                const { publishableKey } = await response.json();
+                stripe = Stripe(publishableKey);
+                console.log('Stripe initialized successfully');
             } catch (error) {
-                console.error('Error initializing Stripe:', error);
+                console.error('Stripe initialization error:', error);
                 showError('Payment system unavailable. Please try again later.');
             }
         }
@@ -290,15 +291,17 @@
                 showError('Your cart is empty!');
                 return;
             }
+
+            if (!stripe) {
+                showError('Payment system is not ready. Please refresh the page.');
+                return;
+            }
             
             const button = this;
             button.disabled = true;
             button.textContent = 'Processing...';
             
             try {
-                // Calculate subtotal
-                const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-                
                 // Prepare line items for Stripe
                 const lineItems = cartItems.map(item => {
                     const displaySize = item.size || item.sizeDisplay || item.measurementName || item.variantDisplay || 'Standard';
@@ -312,23 +315,40 @@
                     };
                 });
                 
-                // For demo purposes, redirect to success page
-                // In production, this would integrate with your Stripe backend
-                const orderSummary = {
-                    items: cartItems,
-                    subtotal: subtotal
-                };
+                console.log('Creating checkout session with items:', lineItems);
                 
-                // Store order in localStorage for demo
-                localStorage.setItem('currentOrder', JSON.stringify(orderSummary));
+                // Create checkout session on server
+                const response = await fetch('/api/create-checkout-session', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        lineItems: lineItems,
+                        province: 'BC' // You can make this dynamic based on user selection
+                    }),
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Failed to create checkout session');
+                }
+
+                const { sessionId } = await response.json();
+                console.log('Checkout session created:', sessionId);
                 
-                // Redirect to success page
-                window.location.href = '/checkout/success.html';
+                // Redirect to Stripe Checkout
+                const result = await stripe.redirectToCheckout({
+                    sessionId: sessionId
+                });
+
+                if (result.error) {
+                    showError(result.error.message);
+                }
                 
             } catch (error) {
                 console.error('Checkout error:', error);
-                showError('Checkout failed. Please try again.');
-            } finally {
+                showError('Checkout failed: ' + error.message);
                 button.disabled = false;
                 button.textContent = 'Checkout with Stripe';
             }

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Cancelled - R Design Supply</title>
+    <link rel="stylesheet" href="/style_sheet/styles.css">
+    <style>
+        .cancelled-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 30px;
+            background-color: #fff3cd;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            border: 2px solid #ffc107;
+        }
+        
+        .cancelled-icon {
+            color: #ff9800;
+            font-size: 64px;
+            margin-bottom: 20px;
+        }
+        
+        .cancelled-title {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        
+        .cancelled-message {
+            font-size: 16px;
+            margin-bottom: 30px;
+            color: #666;
+            line-height: 1.5;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn-primary, .btn-secondary {
+            display: inline-block;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: #45a049;
+        }
+        
+        .btn-secondary {
+            background-color: #666;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="/renda_design_supply.html">
+                <img src="https://res.cloudinary.com/ds4bmw1nd/image/upload/f_auto/q_auto/v1756387201/rds_logo_hbqnog.png" alt="Renda Design Supply">
+            </a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/tools/tools.html">Tools</a></li>
+                <li><a href="/n&t/n&t.html">Notions ✚ Trims</a></li>
+                <li><a href="/f&l/f&l.html">Fabric ✚ Leather</a></li>
+                <li><a href="/support/support.html">Support</a></li>
+            </ul>
+        </nav>
+        <div class="search-cart">
+            <form id="searchForm" action="../search/search-results.html" method="get">
+                <input type="text" id="searchInput" name="q" placeholder="">
+                <button type="submit"></button>
+            </form>
+            <div class="cart-link">
+                <a href="/checkout/cart.html">
+                    <img src="https://res.cloudinary.com/ds4bmw1nd/image/upload/f_auto/q_auto/cart.png" alt="Cart">
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="cancelled-container">
+            <div class="cancelled-icon">⚠</div>
+            <h1 class="cancelled-title">Payment Cancelled</h1>
+            <p class="cancelled-message">
+                Your payment was cancelled and no charges were made.<br>
+                Your items are still in your cart if you'd like to try again.
+            </p>
+            
+            <div class="button-group">
+                <a href="/checkout/cart.html" class="btn-primary">Return to Cart</a>
+                <a href="/renda_design_supply.html" class="btn-secondary">Continue Shopping</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>RDS. &copy; 2025</p>
+    </footer>
+
+    <script>
+        // Log cancellation event
+        console.log('Payment was cancelled by user');
+        
+        // Optional: Track cancellation in analytics
+        document.addEventListener('DOMContentLoaded', function() {
+            // You can add analytics tracking here if needed
+            console.log('User returned from cancelled payment');
+        });
+    </script>
+</body>
+</html>
