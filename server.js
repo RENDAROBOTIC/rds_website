@@ -93,11 +93,22 @@ app.post("/api/create-checkout-session", async (req, res) => {
       },
     };
 
-    // Add shipping options if shipping rate ID is configured
-    if (process.env.STRIPE_SHIPPING_RATE_ID) {
-      sessionConfig.shipping_options = [
-        { shipping_rate: process.env.STRIPE_SHIPPING_RATE_ID }
-      ];
+    // Add shipping options if shipping rate ID(s) are configured
+    // Support both single rate and multiple rates (comma-separated)
+    const shippingRateIds = process.env.STRIPE_SHIPPING_RATE_ID || process.env.STRIPE_SHIPPING_RATE_IDS;
+    if (shippingRateIds) {
+      // Split by comma if multiple rates, otherwise use single rate
+      const rateIds = shippingRateIds.includes(',') 
+        ? shippingRateIds.split(',').map(id => id.trim())
+        : [shippingRateIds.trim()];
+      
+      sessionConfig.shipping_options = rateIds.map(rateId => ({
+        shipping_rate: rateId
+      }));
+      
+      console.log(`Added ${rateIds.length} shipping rate(s) to checkout session`);
+    } else {
+      console.warn('No shipping rate IDs configured. Shipping options will not be displayed.');
     }
 
     const session = await stripe.checkout.sessions.create(sessionConfig);
