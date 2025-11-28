@@ -78,19 +78,29 @@ app.post("/api/create-checkout-session", async (req, res) => {
     // Get the correct domain
     const domain = process.env.DOMAIN || `https://${req.headers.host}`;
 
-    const session = await stripe.checkout.sessions.create({
+    // Build session configuration
+    const sessionConfig = {
       payment_method_types: ['card'],
       line_items: stripeLineItems,
       mode: 'payment',
       success_url: `${domain}/checkout/success.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${domain}/checkout/cancelled.html`,
       shipping_address_collection: {
-        allowed_countries: ['CA'],
+        allowed_countries: ['US', 'CA'],
       },
       automatic_tax: {
         enabled: false,
       },
-    });
+    };
+
+    // Add shipping options if shipping rate ID is configured
+    if (process.env.STRIPE_SHIPPING_RATE_ID) {
+      sessionConfig.shipping_options = [
+        { shipping_rate: process.env.STRIPE_SHIPPING_RATE_ID }
+      ];
+    }
+
+    const session = await stripe.checkout.sessions.create(sessionConfig);
 
     return res.json({ sessionId: session.id });
     
