@@ -40,7 +40,11 @@
                 <h2>Contact Support</h2>
                 <p>If you have any questions or concerns, please fill out the form below and we'll get back to you as soon as possible.</p>
                 
-                <form action="support.php" method="post" id="supportForm">
+                <form action="https://formsubmit.co/rendaricopei.rds@gmail.com" method="POST" id="supportForm">
+                    <input type="hidden" name="_subject" value="Contact Form Submission from RDS Website">
+                    <input type="hidden" name="_captcha" value="false">
+                    <input type="hidden" name="_next" value="">
+                    
                     <label for="name">Name:</label>
                     <input type="text" id="name" name="name" required maxlength="100">
 
@@ -51,6 +55,7 @@
                     <textarea id="message" name="message" required></textarea>
 
                     <button type="submit">Send</button>
+                    <div id="form-message" style="margin-top: 15px; display: none;"></div>
                 </form>
                 
                 <div class="contact-info">
@@ -73,15 +78,70 @@
         </div>
     </footer>
     <script>
-        // Form validation
-        document.getElementById('supportForm').addEventListener('submit', function(event) {
+        // Form submission with FormSubmit.co
+        document.getElementById('supportForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
             const name = document.getElementById('name').value.trim();
             const email = document.getElementById('email').value.trim();
             const message = document.getElementById('message').value.trim();
+            const formMessage = document.getElementById('form-message');
+            const submitButton = event.target.querySelector('button[type="submit"]');
             
+            // Validation
             if (name === '' || email === '' || message === '') {
-                event.preventDefault();
-                alert('Please fill out all fields');
+                formMessage.style.display = 'block';
+                formMessage.style.color = '#dc3545';
+                formMessage.style.backgroundColor = '#f8d7da';
+                formMessage.style.padding = '10px';
+                formMessage.style.borderRadius = '4px';
+                formMessage.textContent = 'Please fill out all fields';
+                return;
+            }
+            
+            // Disable submit button
+            submitButton.disabled = true;
+            submitButton.textContent = 'Sending...';
+            formMessage.style.display = 'none';
+            
+            try {
+                const formData = new FormData(event.target);
+                const response = await fetch(event.target.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+                
+                formMessage.style.display = 'block';
+                formMessage.style.padding = '10px';
+                formMessage.style.borderRadius = '4px';
+                
+                if (response.ok) {
+                    formMessage.style.color = '#155724';
+                    formMessage.style.backgroundColor = '#d4edda';
+                    formMessage.textContent = 'Thank you for contacting us! We will get back to you shortly.';
+                    
+                    // Reset form
+                    event.target.reset();
+                } else {
+                    const data = await response.json();
+                    formMessage.style.color = '#dc3545';
+                    formMessage.style.backgroundColor = '#f8d7da';
+                    formMessage.textContent = data.error || 'Failed to send message. Please try again later.';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                formMessage.style.display = 'block';
+                formMessage.style.color = '#dc3545';
+                formMessage.style.backgroundColor = '#f8d7da';
+                formMessage.style.padding = '10px';
+                formMessage.style.borderRadius = '4px';
+                formMessage.textContent = 'Failed to send message. Please try again later.';
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Send';
             }
         });
     </script>
