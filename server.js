@@ -43,8 +43,6 @@ app.post("/api/create-checkout-session", async (req, res) => {
     if (!lineItems || lineItems.length === 0) {
       return res.status(400).json({ error: 'No items in cart' });
     }
-
-    const taxRate = TAX_RATES[province] || TAX_RATES['BC'];
     
     const stripeLineItems = lineItems.map(item => ({
       price_data: {
@@ -57,23 +55,6 @@ app.post("/api/create-checkout-session", async (req, res) => {
       },
       quantity: item.quantity,
     }));
-
-    const subtotal = lineItems.reduce((sum, item) => sum + (item.amount * item.quantity), 0);
-    const taxAmount = Math.round(subtotal * taxRate.total);
-    
-    if (taxAmount > 0) {
-      stripeLineItems.push({
-        price_data: {
-          currency: 'cad',
-          product_data: {
-            name: `${province} Tax (${(taxRate.total * 100).toFixed(1)}%)`,
-            description: 'Sales Tax',
-          },
-          unit_amount: taxAmount,
-        },
-        quantity: 1,
-      });
-    }
 
     // Get the correct domain
     const domain = process.env.DOMAIN || `https://${req.headers.host}`;

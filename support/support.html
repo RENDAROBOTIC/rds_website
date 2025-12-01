@@ -43,7 +43,9 @@
                 <form action="https://formsubmit.co/rendaricopei.rds@gmail.com" method="POST" id="supportForm">
                     <input type="hidden" name="_subject" value="Contact Form Submission from RDS Website">
                     <input type="hidden" name="_captcha" value="false">
-                    <input type="hidden" name="_next" value="">
+                    <input type="hidden" name="_template" value="box">
+                    <input type="hidden" name="_autoresponse" value="Thank you for contacting RDS. We will get back to you shortly!">
+                    <input type="text" name="_honey" style="display:none">
                     
                     <label for="name">Name:</label>
                     <input type="text" id="name" name="name" required maxlength="100">
@@ -106,6 +108,8 @@
             
             try {
                 const formData = new FormData(event.target);
+                
+                // Submit to FormSubmit
                 const response = await fetch(event.target.action, {
                     method: 'POST',
                     body: formData,
@@ -118,18 +122,28 @@
                 formMessage.style.padding = '10px';
                 formMessage.style.borderRadius = '4px';
                 
+                // FormSubmit returns success on 200 status
                 if (response.ok) {
-                    formMessage.style.color = '#155724';
-                    formMessage.style.backgroundColor = '#d4edda';
-                    formMessage.textContent = 'Thank you for contacting us! We will get back to you shortly.';
-                    
-                    // Reset form
-                    event.target.reset();
+                    // Try to parse JSON response
+                    try {
+                        const data = await response.json();
+                        if (data.success !== false) {
+                            formMessage.style.color = '#155724';
+                            formMessage.style.backgroundColor = '#d4edda';
+                            formMessage.textContent = 'Thank you for contacting us! We will get back to you shortly.';
+                            event.target.reset();
+                        } else {
+                            throw new Error(data.message || 'Submission failed');
+                        }
+                    } catch (parseError) {
+                        // If response is not JSON, assume success
+                        formMessage.style.color = '#155724';
+                        formMessage.style.backgroundColor = '#d4edda';
+                        formMessage.textContent = 'Thank you for contacting us! We will get back to you shortly.';
+                        event.target.reset();
+                    }
                 } else {
-                    const data = await response.json();
-                    formMessage.style.color = '#dc3545';
-                    formMessage.style.backgroundColor = '#f8d7da';
-                    formMessage.textContent = data.error || 'Failed to send message. Please try again later.';
+                    throw new Error('Server error');
                 }
             } catch (error) {
                 console.error('Error:', error);
@@ -138,7 +152,7 @@
                 formMessage.style.backgroundColor = '#f8d7da';
                 formMessage.style.padding = '10px';
                 formMessage.style.borderRadius = '4px';
-                formMessage.textContent = 'Failed to send message. Please try again later.';
+                formMessage.textContent = 'Failed to send message. Please try again later or email us directly at rendaricopei.rds@gmail.com';
             } finally {
                 submitButton.disabled = false;
                 submitButton.textContent = 'Send';

@@ -61,7 +61,7 @@
                             <label for="imperial">Imperial (24 inch) - $18.95</label>
                         </div> -->
                         <div class="measurement-option">
-                            <input type="radio" id="metric" name="measurement" value="metric" onchange="updatePrice()">
+                            <input type="radio" id="metric" name="measurement" value="metric" checked onchange="updatePrice()">
                             <label for="metric">Metric (60 cm) - $35</label>
                         </div>
                         <!-- <div class="measurement-option">
@@ -151,10 +151,10 @@
         // Note: Only metric option is available in HTML, but keeping switch for consistency
         switch(measurementType) {
             case 'metric':
-                price = '$53.00';
+                price = '$35.00';
                 break;
             default:
-                price = '$53.00';
+                price = '$35.00';
         }
         
         document.querySelector('.price').innerText = price;
